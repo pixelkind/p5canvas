@@ -1,13 +1,15 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 
 export class TextDocumentContentProvider implements vscode.TextDocumentContentProvider {
+    
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
 
+    public server;
+
     public provideTextDocumentContent(uri: vscode.Uri): string {
-        return this.createHtmlSnippet();
+        return this.createHtml();
     }
 
     get onDidChange(): vscode.Event<vscode.Uri> {
@@ -18,10 +20,10 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
         this._onDidChange.fire(uri);
     }
 
-    private createHtmlSnippet() {
+    private createHtml() {
         let editor = vscode.window.activeTextEditor;
         if (!(editor.document.languageId === 'javascript')) {
-            return this.errorSnippet("Active editor doesn't show a JavaScript document.")
+            return this.errorHtml("Active editor doesn't show a JavaScript document.")
         }
         return this.extractSnippet();
     }
@@ -30,16 +32,17 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
         let editor = vscode.window.activeTextEditor;
         let text = editor.document.getText();
         let path = vscode.extensions.getExtension("garrit.p5canvas").extensionPath;
-        // check if js is valid, otherwise show error
-        // let begin: string = "<!DOCTYPE html><html><head><script src=\"https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.sound.min.js\"></script>"
         
         let begin: string = "<!DOCTYPE html><html><head><script src=\"" + path + "/assets/p5.min.js\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.sound.min.js\"></script>"
-        let js = "<script>" + text + "</script>";
+        let jquery: string = "<script src=\"" + path + "/assets/jquery-3.2.1.min.js\"></script>";
+        let websocketSetup: string = "<script src=\"" + path + "/assets/websocketlog.js\"></script><script>setupWebsocket('" + this.server + "');</script>";
+        let p5resize: string = "<script src=\"" + path + "/assets/p5setup.js\"></script>";
+        let js = "<script id=\"code\">" + text + "</script>";
         let end: string = "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"><style> body {padding: 0; margin: 0;} </style></head><body></body></html>"
-        return begin + js + end;
+        return begin + jquery + websocketSetup + p5resize + js + end;
     }
 
-    private errorSnippet(error: string): string {
+    private errorHtml(error: string): string {
         return `
             <body>
                 ${error}
