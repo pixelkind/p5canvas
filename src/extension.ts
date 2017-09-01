@@ -8,6 +8,11 @@ export function activate(context: vscode.ExtensionContext) {
     
     let previewUri = vscode.Uri.parse('p5canvas://authority/p5canvas');
 
+    let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+    statusBarItem.text = `$(file-media) p5canvas`;
+    statusBarItem.command = 'extension.showCanvas';
+    statusBarItem.show();
+
     let provider = new TextDocumentContentProvider();
 	let registration = vscode.workspace.registerTextDocumentContentProvider('p5canvas', provider);
 
@@ -23,16 +28,16 @@ export function activate(context: vscode.ExtensionContext) {
             let text = editor.document.getText();
             websocket.send(text);
 		}
-	});
-
-	vscode.window.onDidChangeTextEditorSelection((e: vscode.TextEditorSelectionChangeEvent) => {
-		if (e.textEditor === vscode.window.activeTextEditor) {
-            let editor = vscode.window.activeTextEditor;
-            let text = editor.document.getText();
-            websocket.send(text);
-		}
     });
     
+    vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
+        if (e.document.languageId == 'javascript') {
+            statusBarItem.show();
+        } else {
+            statusBarItem.hide();
+        }
+    });
+
     let disposable = vscode.commands.registerCommand('extension.showCanvas', () => {
         vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'p5js Canvas').then((success) => {
             outputChannel.show(true);
@@ -41,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable, statusBarItem);
 }
 
 export function deactivate() {

@@ -40,4 +40,8 @@ export class WebSocketServer {
         }
     }
 
+    dispose() {
+        this.websocket.dispose();
+    }
+
 }
