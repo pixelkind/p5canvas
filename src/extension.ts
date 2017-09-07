@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { TextDocumentContentProvider } from './TextDocumentContentProvider';
 import { WebSocketServer } from './WebSocketServer';
+import { JSHINT } from 'jshint';
 
 export function activate(context: vscode.ExtensionContext) {
     
@@ -26,7 +27,18 @@ export function activate(context: vscode.ExtensionContext) {
 		if (e.document === vscode.window.activeTextEditor.document) {
             let editor = vscode.window.activeTextEditor;
             let text = editor.document.getText();
-            websocket.send(text);
+            JSHINT(text);
+
+            if (JSHINT.errors.length == 0) {
+                websocket.send(text);
+            } else {
+                let message = "🙊 Errors:\n";
+                JSHINT.errors.forEach(element => {
+                    message += `Line ${element.line}, col ${element.character}: ${element.reason}\n`;
+                });
+                outputChannel.clear();
+                outputChannel.append(message);
+            }
 		}
     });
     
