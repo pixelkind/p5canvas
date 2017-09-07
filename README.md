@@ -22,3 +22,7 @@ There are currently no known issues. If you find any issues, please feel free, t
 ### 1.0.0
 
 Initial release of p5canvas.
+
+## License
+
+This Library is licensed under the MIT License. Please refer to the `LICENSE.txt` for more information.
