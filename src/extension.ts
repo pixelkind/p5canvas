@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
     statusBarItem.show();
 
     let provider = new TextDocumentContentProvider();
-	let registration = vscode.workspace.registerTextDocumentContentProvider('p5canvas', provider);
+    let registration = vscode.workspace.registerTextDocumentContentProvider('p5canvas', provider);
 
     let outputChannel = vscode.window.createOutputChannel('p5canvas console');
     let websocket = new WebSocketServer(outputChannel);
@@ -30,6 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
             JSHINT(text);
 
             if (JSHINT.errors.length == 0) {
+                outputChannel.clear();
                 websocket.send(text);
             } else {
                 let message = "🙊 Errors:\n";
