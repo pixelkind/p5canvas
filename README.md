@@ -19,6 +19,10 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.0.1
+
+Small improvements
+
 ### 1.0.0
 
 Initial release of p5canvas.
