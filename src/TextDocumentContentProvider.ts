@@ -37,9 +37,10 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
         let jquery: string = "<script src=\"" + path + "/assets/jquery-3.2.1.min.js\"></script>";
         let websocketSetup: string = "<script src=\"" + path + "/assets/websocketlog.js\"></script><script>setupWebsocket('" + this.server + "');</script>";
         let p5resize: string = "<script src=\"" + path + "/assets/p5setup.js\"></script>";
+        let errorHandler: string = "<script src=\"" + path + "/assets/errorHandler.js\"></script>";
         let js = "<script id=\"code\">" + text + "</script>";
         let end: string = "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"><style> body {padding: 0; margin: 0;} </style></head><body></body></html>"
-        return begin + jquery + websocketSetup + p5resize + js + end;
+        return begin + jquery + websocketSetup + p5resize + errorHandler + js + end;
     }
 
     private errorHtml(error: string): string {

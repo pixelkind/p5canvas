@@ -4,6 +4,8 @@ The p5canvas extensions allows you to preview your p5js code in a canvas side by
 
 ![Example Screenshot](images/example_01.png)
 
+There is a standard setup script included which setups a full width/height canvas that will be resized automatically. In one of the next versions this will become optional.
+
 ## Features
 
 - Side Preview while editing the JavaScript file
@@ -18,6 +20,10 @@ If a JavaScript file is open, a p5canvas button appears in the status bar bottom
 There are currently no known issues. If you find any issues, please feel free, to message me on [Twitter](https://twitter.com/pixelkind) or [Github](https://github.com/pixelkind/p5canvas).
 
 ## Release Notes
+
+## 1.0.2
+
+Bugfix for issue #1
 
 ### 1.0.1
 
