@@ -30,8 +30,6 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
     }
 
     private extractSnippet(): string {
-        let editor = vscode.window.activeTextEditor;
-        let text = editor.document.getText();
         let path = vscode.extensions.getExtension("garrit.p5canvas").extensionPath;
 
         let elements = [];
@@ -52,7 +50,7 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
         elements.push(p5resize);
         let errorHandler: string = '<script src="' + path + '/assets/errorHandler.js"></script>';
         elements.push(errorHandler);
-        let js = '<script id="code">' + text + '</script>';
+        let js = '<script id="code">' + '</script>';
         elements.push(js);
         elements.push(htmlbody);
 
