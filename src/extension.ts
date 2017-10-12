@@ -23,22 +23,18 @@ export function activate(context: vscode.ExtensionContext) {
         provider.server = websocket.url;
     }
 
+    let lastKnownEditor = vscode.window.activeTextEditor;
+
+    websocket.onConnection = () => {
+        outputChannel.show(true);
+        updateCode(lastKnownEditor, websocket, outputChannel);
+    }
+
     vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
 		if (e.document === vscode.window.activeTextEditor.document) {
             let editor = vscode.window.activeTextEditor;
-            let text = editor.document.getText();
-            JSHINT(text);
-
-            if (JSHINT.errors.length == 0) {
-                outputChannel.clear();
-                websocket.send(text);
-            } else {
-                let message = "🙊 Errors:\n";
-                JSHINT.errors.forEach(element => {
-                    message += `Line ${element.line}, col ${element.character}: ${element.reason}\n`;
-                });
-                outputChannel.clear();
-                outputChannel.append(message);
+            if (editor) {
+                updateCode(editor, websocket, outputChannel);
             }
 		}
     });
@@ -52,14 +48,31 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let disposable = vscode.commands.registerCommand('extension.showCanvas', () => {
-        vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'p5js Canvas').then((success) => {
-            outputChannel.show(true);
+        vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'p5canvas').then((success) => {
+            
         }, (reason) => {
             vscode.window.showErrorMessage(reason);
         });
     });
 
     context.subscriptions.push(disposable, statusBarItem);
+}
+
+function updateCode(editor, websocket, outputChannel) {
+    let text = editor.document.getText();
+    JSHINT(text);
+
+    if (JSHINT.errors.length == 0) {
+        outputChannel.clear();
+        websocket.send(text);
+    } else {
+        let message = "🙊 Errors:\n";
+        JSHINT.errors.forEach(element => {
+            message += `Line ${element.line}, col ${element.character}: ${element.reason}\n`;
+        });
+        outputChannel.clear();
+        outputChannel.append(message);
+    }
 }
 
 export function deactivate() {

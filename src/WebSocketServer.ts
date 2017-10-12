@@ -11,6 +11,7 @@ export class WebSocketServer {
 
     public url: string = "";
     public onListening: () => void = () => {};
+    public onConnection: () => void = () => {};
 
     constructor(outputChannel: vscode.OutputChannel) {
         this.channel = outputChannel;
@@ -24,6 +25,7 @@ export class WebSocketServer {
             // Listening for open connection
             this.socket.on('connection', (websocket) => {
                 this.websocket = websocket;
+                this.onConnection();
 
                 // Listening for incomming messages
                 this.websocket.on('message', (data) => {
