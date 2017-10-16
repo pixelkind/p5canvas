@@ -21,6 +21,10 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+## 1.0.4
+
+- Clear the canvas on reload and resize
+
 ## 1.0.3
 
 - New icon

@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.0.4
+
+- Clear the canvas on reload and resize
+
 ## 1.0.3
 
 - New icon
