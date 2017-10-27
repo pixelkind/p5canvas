@@ -15,7 +15,7 @@ function setupWebsocket (server) {
     }
 
     socket.onmessage = (event) => {
-      $('#code').replaceWith('<script id="code">clear();' + event.data + '\nproductionize(this);</script>')
+      $('#code').replaceWith('<script id="code">function draw() {}; p5reset();' + event.data + '\nproductionize(this);</script>')
     }
   }
 }
