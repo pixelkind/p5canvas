@@ -23,9 +23,6 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
 
     private createHtml() {
         let editor = vscode.window.activeTextEditor;
-        if (!(editor.document.languageId === 'javascript')) {
-            return this.errorHtml("Active editor doesn't show a JavaScript document.")
-        }
         return this.extractSnippet();
     }
 

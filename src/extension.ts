@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
     
     vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
-        if (e.document.languageId == 'javascript') {
+        if (e && e.document.languageId == 'javascript') {
             statusBarItem.show();
             let editor = vscode.window.activeTextEditor;
             if (editor) {
