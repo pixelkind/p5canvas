@@ -7,8 +7,9 @@ function setupWebsocket (server) {
 
   socket.onopen = (event) => {
     window.console.log = (msg) => {
-      if(typeof msg == 'object')
+      if(typeof msg == 'object') {
         msg = JSON.stringify(msg, null, 4)
+      }
 
       socket.send(msg)
     }
