@@ -37,6 +37,19 @@
         "type": "git",
         "url": "https://github.com/pixelkind/p5canvas"
     },
+    "bugs": {
+        "url": "https://github.com/pixelkind/p5canvas/issues"
+    },
+    "contributors": [
+        {
+            "name": "Garrit Schaap",
+            "url": "https://github.com/pixelkind"
+        },
+        {
+            "name": "Davide Becker",
+            "url": "https://github.com/DavideBecker"
+        }
+    ],
     "author": {
         "name": "Garrit Schaap",
         "url": "http://www.garrit.io"
