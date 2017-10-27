@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.0.5
+
+- Fixed a crash when selecting the preview window
+- Reseting the values on restart
+- Reload on Active Editor Change
+
 ## 1.0.4
 
 - Clear the canvas on reload and resize

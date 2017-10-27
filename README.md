@@ -21,17 +21,23 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
-## 1.0.4
+### 1.0.5
+
+- Fixed a crash when selecting the preview window
+- Reseting the values on restart
+- Reload on Active Editor Change
+
+### 1.0.4
 
 - Clear the canvas on reload and resize
 
-## 1.0.3
+### 1.0.3
 
 - New icon
 - Updated p5 library
 - Load after Websocket is connected between preview and editor
 
-## 1.0.2
+### 1.0.2
 
 Bugfix for issue #1
 
