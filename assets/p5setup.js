@@ -2,7 +2,10 @@ function setup() {
   // Override the loadImage method from p5js to enable the usage of relative paths
   let loadImageSuper = loadImage
   loadImage = (path, successCallback, failureCallback) => {
-    return loadImageSuper.apply(this, [localPath + path, successCallback, failureCallback])
+    if (!path.startsWith('file:') && !path.startsWith('http')) {
+      path = localPath + path
+    }
+    return loadImageSuper.apply(this, [path, successCallback, failureCallback])
   }
 
   createCanvas(windowWidth, windowHeight)
