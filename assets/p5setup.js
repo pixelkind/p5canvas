@@ -1,5 +1,6 @@
 function setup() {
   // Override the loadImage method from p5js to enable the usage of relative paths
+  // This method must be overriden inside of setup
   let loadImageSuper = loadImage
   loadImage = (path, successCallback, failureCallback) => {
     if (!path.startsWith('file:') && !path.startsWith('http')) {

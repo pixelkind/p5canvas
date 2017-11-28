@@ -6,7 +6,7 @@ function productionize (object) {
   
   for (name in object) {
     method = object[name]
-    if (typeof method === 'function') {
+    if (typeof method === 'function' && name != 'p5') {
       object[name] = (function (name, method) {
         return function () {
           try {
