@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as os from 'os';
 
 export class TextDocumentContentProvider implements vscode.TextDocumentContentProvider {
     
@@ -29,7 +30,11 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
 
     private extractSnippet(): string {
         let extensionPath = vscode.extensions.getExtension("garrit.p5canvas").extensionPath;
-        let localPath = 'file:' + path.dirname(vscode.window.activeTextEditor.document.uri.fsPath) + path.sep;
+        let fileDesc = 'file://';
+        if (os.platform() == 'win32') {
+            fileDesc += 'localhost/';
+        }
+        let localPath = encodeURI(fileDesc + path.dirname(vscode.window.activeTextEditor.document.uri.fsPath) + path.sep);
 
         let elements = [];
 
