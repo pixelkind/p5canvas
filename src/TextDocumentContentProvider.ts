@@ -2,6 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as path from 'path';
 
 export class TextDocumentContentProvider implements vscode.TextDocumentContentProvider {
     
@@ -27,27 +28,30 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
     }
 
     private extractSnippet(): string {
-        let path = vscode.extensions.getExtension("garrit.p5canvas").extensionPath;
+        let extensionPath = vscode.extensions.getExtension("garrit.p5canvas").extensionPath;
+        let localPath = 'file:' + path.dirname(vscode.window.activeTextEditor.document.uri.fsPath) + path.sep;
 
         let elements = [];
 
-        let htmlhead = fs.readFileSync(path + '/assets/html_head.html', 'UTF-8');
+        let htmlhead = fs.readFileSync(extensionPath + '/assets/html_head.html', 'UTF-8');
         elements.push(htmlhead);
-        let htmlbody = fs.readFileSync(path + '/assets/html_body.html', 'UTF-8');
+        let htmlbody = fs.readFileSync(extensionPath + '/assets/html_body.html', 'UTF-8');
         
-        let p5lib: string = '<script src="' + path + '/assets/p5.min.js"></script>';
+        let p5lib: string = '<script src="' + extensionPath + '/assets/p5.min.js"></script>';
         elements.push(p5lib);
-        let p5sound: string = '<script src="' + path + '/p5.sound.min.js"></script>';
+        let p5sound: string = '<script src="' + extensionPath + '/p5.sound.min.js"></script>';
         elements.push(p5sound);
-        let jquery: string = '<script src="' + path + '/assets/jquery-3.2.1.min.js"></script>';
+        let jquery: string = '<script src="' + extensionPath + '/assets/jquery-3.2.1.min.js"></script>';
         elements.push(jquery);
-        let websocketSetup: string = '<script src="' + path + '/assets/websocketlog.js"></script><script>setupWebsocket("' + this.server + '");</script>';
+        let websocketSetup: string = '<script src="' + extensionPath + '/assets/websocketlog.js"></script><script>setupWebsocket("' + this.server + '");</script>';
         elements.push(websocketSetup);
-        let p5resize: string = '<script src="' + path + '/assets/p5setup.js"></script>';
+        let p5resize: string = '<script src="' + extensionPath + '/assets/p5setup.js"></script>';
         elements.push(p5resize);
-        let errorHandler: string = '<script src="' + path + '/assets/errorHandler.js"></script>';
+        let errorHandler: string = '<script src="' + extensionPath + '/assets/errorHandler.js"></script>';
         elements.push(errorHandler);
-        let js = '<script id="code">' + '</script>';
+        let localPathJs = '<script>window.localPath = "' + localPath + '";</script>';
+        elements.push(localPathJs);
+        let js = '<script id="code"></script>';
         elements.push(js);
         elements.push(htmlbody);
 
