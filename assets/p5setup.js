@@ -3,7 +3,7 @@ function setup() {
   let loadImageSuper = loadImage
   loadImage = (path, successCallback, failureCallback) => {
     if (!path.startsWith('file:') && !path.startsWith('http')) {
-      path = localPath + path
+      path = decodeURI(localPath) + path
     }
     return loadImageSuper.apply(this, [path, successCallback, failureCallback])
   }
