@@ -10,6 +10,7 @@ There is a standard setup script included which setups a full width/height canva
 
 - Side Preview while editing the JavaScript file
 - JSHint integration to find errors
+- Loading images with relative path
 
 ## Usage
 
@@ -21,33 +22,12 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
-### 1.0.5
+### 1.0.6
 
-- Fixed a crash when selecting the preview window
-- Reseting the values on restart
-- Reload on Active Editor Change
+- Fixed a bug, where the p5 static-object was no longer available globally
+- Added support for loading images via a relative path
 
-### 1.0.4
-
-- Clear the canvas on reload and resize
-
-### 1.0.3
-
-- New icon
-- Updated p5 library
-- Load after Websocket is connected between preview and editor
-
-### 1.0.2
-
-Bugfix for issue #1
-
-### 1.0.1
-
-Small improvements
-
-### 1.0.0
-
-Initial release of p5canvas.
+For more Information, please look at the [Changelog](CHANGELOG.md).
 
 ## License
 

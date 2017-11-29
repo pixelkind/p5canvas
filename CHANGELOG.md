@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.0.6
+
+- Fixed a bug, where the p5 static-object was no longer available globally
+- Added support for loading images via a relative path
+
 ## 1.0.5
 
 - Fixed a crash when selecting the preview window
