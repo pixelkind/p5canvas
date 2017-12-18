@@ -5,6 +5,8 @@ import { TextDocumentContentProvider } from './TextDocumentContentProvider';
 import { WebSocketServer } from './WebSocketServer';
 import { JSHINT } from 'jshint';
 
+var websocket: WebSocketServer;
+
 export function activate(context: vscode.ExtensionContext) {
     
     let previewUri = vscode.Uri.parse('p5canvas://authority/p5canvas');
@@ -18,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     let registration = vscode.workspace.registerTextDocumentContentProvider('p5canvas', provider);
 
     let outputChannel = vscode.window.createOutputChannel('p5canvas console');
-    let websocket = new WebSocketServer(outputChannel);
+    websocket = new WebSocketServer(outputChannel);
     websocket.onListening = () => {
         provider.server = websocket.url;
     }
@@ -31,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
-		if (e.document === vscode.window.activeTextEditor.document) {
+		if (e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
             let editor = vscode.window.activeTextEditor;
             if (editor) {
                 updateCode(editor, websocket, outputChannel);
@@ -80,4 +82,5 @@ function updateCode(editor, websocket, outputChannel) {
 }
 
 export function deactivate() {
+    websocket.dispose();
 }
