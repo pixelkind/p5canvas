@@ -24,7 +24,6 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
     }
 
     private createHtml() {
-        let editor = vscode.window.activeTextEditor;
         return this.extractSnippet();
     }
 
@@ -34,6 +33,7 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
         if (os.platform() == 'win32') {
             fileDesc += 'localhost/';
         }
+        // has to be changed everytime the window reloads
         let localPath = encodeURI(fileDesc + path.dirname(vscode.window.activeTextEditor.document.uri.fsPath) + path.sep);
 
         let elements = [];
@@ -44,7 +44,7 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
         
         let p5lib: string = '<script src="' + extensionPath + '/assets/p5.min.js"></script>';
         elements.push(p5lib);
-        let p5sound: string = '<script src="' + extensionPath + '/p5.sound.min.js"></script>';
+        let p5sound: string = '<script src="' + extensionPath + '/assets/p5.sound.min.js"></script>';
         elements.push(p5sound);
         let jquery: string = '<script src="' + extensionPath + '/assets/jquery-3.2.1.min.js"></script>';
         elements.push(jquery);
