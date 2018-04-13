@@ -29,14 +29,17 @@ export function activate(context: vscode.ExtensionContext) {
 
     websocket.onConnection = () => {
         outputChannel.show(true);
-        updateCode(lastKnownEditor, websocket, outputChannel);
+        if (lastKnownEditor && lastKnownEditor.document) {
+            updateCode(lastKnownEditor, websocket, outputChannel);
+        }
     }
 
     vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
-		if (e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
+		if (e && e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
             let editor = vscode.window.activeTextEditor;
             if (editor) {
-                updateCode(editor, websocket, outputChannel);
+                lastKnownEditor = editor;
+                updateCode(lastKnownEditor, websocket, outputChannel);
             }
 		}
     });
@@ -46,7 +49,8 @@ export function activate(context: vscode.ExtensionContext) {
             statusBarItem.show();
             let editor = vscode.window.activeTextEditor;
             if (editor) {
-                updateCode(editor, websocket, outputChannel);
+                lastKnownEditor = editor;
+                updateCode(lastKnownEditor, websocket, outputChannel);
             }
         } else {
             statusBarItem.hide();
@@ -65,6 +69,10 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function updateCode(editor, websocket, outputChannel) {
+    if (!editor) {
+        console.log('Error: No document found');
+        return;
+    }
     let text = editor.document.getText();
     JSHINT(text);
 
