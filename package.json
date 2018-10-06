@@ -24,13 +24,13 @@
     "devDependencies": {
         "@types/mocha": "^2.2.44",
         "@types/node": "^6.0.90",
-        "mocha": "^2.3.3",
+        "mocha": "^5.2.0",
         "typescript": "^2.5.3",
-        "vscode": "^1.1.6"
+        "vscode": "^1.1.21"
     },
     "dependencies": {
-        "jshint": "^2.9.5",
-        "ws": "^3.2.0"
+        "jshint": "^2.9.6",
+        "ws": "^6.1.0"
     },
     "license": "MIT",
     "repository": {
