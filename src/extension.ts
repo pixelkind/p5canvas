@@ -4,8 +4,10 @@ import * as vscode from 'vscode';
 import { TextDocumentContentProvider } from './TextDocumentContentProvider';
 import { WebSocketServer } from './WebSocketServer';
 import { JSHINT } from 'jshint';
+import { Linter } from 'eslint';
 
 var websocket: WebSocketServer;
+var linter = new Linter();
 
 export function activate(context: vscode.ExtensionContext) {
     
@@ -35,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
-		if (e && e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
+		if (e != undefined && e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
             let editor = vscode.window.activeTextEditor;
             if (editor) {
                 lastKnownEditor = editor;
@@ -75,6 +77,21 @@ function updateCode(editor, websocket, outputChannel) {
     }
     let text = editor.document.getText();
     JSHINT(text);
+    let result = linter.verify(text, {
+        rules: {
+            rules: {
+                semi: 2
+            }
+        },
+        parserOptions: {
+            "ecmaVersion": 6
+        }
+        env: {
+            "browser": true
+        }
+    });
+    console.log(result);
+    console.log(JSHINT.errors.length);
 
     if (JSHINT.errors.length == 0) {
         outputChannel.clear();
