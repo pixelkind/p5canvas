@@ -29,7 +29,10 @@ export class WebSocketServer {
 
                 // Listening for incomming messages
                 this.websocket.on('message', (data) => {
-                    this.channel.appendLine(data);
+                    let obj = JSON.parse(data)
+                    if (obj.type == 'log') {
+                        this.channel.appendLine(obj.msg);
+                    }
                 });
             });
 

@@ -11,7 +11,10 @@ function setupWebsocket (server) {
         msg = JSON.stringify(msg, null, 4)
       }
 
-      socket.send(msg)
+      socket.send(JSON.stringify({
+        'type': 'log',
+        'msg': msg
+      }))
     }
 
     socket.onmessage = (event) => {
