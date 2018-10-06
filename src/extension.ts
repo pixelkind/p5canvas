@@ -65,7 +65,11 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    context.subscriptions.push(disposable, statusBarItem);
+    let disposableSaveAsPNG = vscode.commands.registerCommand('extension.saveAsPNG', () => {
+        
+    });
+
+    context.subscriptions.push(disposable, statusBarItem, disposableSaveAsPNG);
 }
 
 function updateCode(editor, websocket, outputChannel) {
