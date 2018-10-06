@@ -39,9 +39,12 @@ export class WebSocketServer {
         });
     }
 
-    public send(code: string) {
+    public sendCode(code: string) {
         if (this.websocket != undefined) {
-            this.websocket.send(code);
+            this.websocket.send(JSON.stringify({
+                'type': 'code',
+                'data': code
+            }));
         }
     }
 

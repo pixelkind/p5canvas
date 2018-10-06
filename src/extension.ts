@@ -82,7 +82,7 @@ function updateCode(editor, websocket, outputChannel) {
 
     if (JSHINT.errors.length == 0) {
         outputChannel.clear();
-        websocket.send(text);
+        websocket.sendCode(text);
     } else {
         let message = "🙊 Errors:\n";
         JSHINT.errors.forEach(element => {

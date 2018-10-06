@@ -18,7 +18,10 @@ function setupWebsocket (server) {
     }
 
     socket.onmessage = (event) => {
-      $('#code').replaceWith('<script id="code">function draw() {}; p5reset();' + event.data + '\nproductionize(this);</script>')
+      let obj = JSON.parse(event.data)
+      if (obj.type == 'code') {
+        $('#code').replaceWith('<script id="code">function draw() {}; p5reset();' + obj.data + '\nproductionize(this);</script>')
+      }
     }
   }
 }
