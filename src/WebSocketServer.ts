@@ -3,6 +3,10 @@
 import * as vscode from 'vscode';
 import * as WebSocket from 'ws';
 
+export enum ImageType {
+    png = 'png',
+}
+
 export class WebSocketServer {
 
     private socket: WebSocket.Server;
@@ -32,6 +36,18 @@ export class WebSocketServer {
                     let obj = JSON.parse(data)
                     if (obj.type == 'log') {
                         this.channel.appendLine(obj.msg);
+                    } else if (obj.type == 'imageData') {
+                        if (obj.mimeType == 'png') {
+                            let options = {
+                                'filters': {
+                                    'Images': ['png']
+                                }
+                            }
+                            vscode.window.showSaveDialog(options, (result) => {
+                                console.log(result);
+                            });
+
+                        }
                     }
                 });
             });
@@ -44,6 +60,15 @@ export class WebSocketServer {
             this.websocket.send(JSON.stringify({
                 'type': 'code',
                 'data': code
+            }));
+        }
+    }
+
+    public sendImageRequest(type: ImageType) {
+        if (this.websocket != undefined) {
+            this.websocket.send(JSON.stringify({
+                'type': 'imageRequest', 
+                'mimeType': type.toString()
             }));
         }
     }

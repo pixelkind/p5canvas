@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import { TextDocumentContentProvider } from './TextDocumentContentProvider';
-import { WebSocketServer } from './WebSocketServer';
+import { WebSocketServer, ImageType } from './WebSocketServer';
 import { JSHINT } from 'jshint';
 
 var websocket: WebSocketServer;
@@ -66,7 +66,8 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let disposableSaveAsPNG = vscode.commands.registerCommand('extension.saveAsPNG', () => {
-        
+        // console.log(ImageType.png.toString());
+        websocket.sendImageRequest(ImageType.png);
     });
 
     context.subscriptions.push(disposable, statusBarItem, disposableSaveAsPNG);

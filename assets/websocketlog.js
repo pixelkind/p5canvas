@@ -21,6 +21,14 @@ function setupWebsocket (server) {
       let obj = JSON.parse(event.data)
       if (obj.type == 'code') {
         $('#code').replaceWith('<script id="code">function draw() {}; p5reset();' + obj.data + '\nproductionize(this);</script>')
+      } else if(obj.type == 'imageRequest') {
+        let canvas = $('canvas')[0]
+        let data = canvas.toDataURL('image/png')
+        socket.send(JSON.stringify({
+          'type': 'imageData',
+          'mimeType': 'png',
+          'data': data 
+        }))
       }
     }
   }
