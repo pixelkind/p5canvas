@@ -7,7 +7,7 @@ function setupWebsocket (server) {
 
   socket.onopen = (event) => {
     window.console.log = (msg) => {
-      if(typeof msg == 'object') {
+      if (typeof msg === 'object') {
         msg = JSON.stringify(msg, null, 4)
       }
 
@@ -19,15 +19,15 @@ function setupWebsocket (server) {
 
     socket.onmessage = (event) => {
       let obj = JSON.parse(event.data)
-      if (obj.type == 'code') {
+      if (obj.type === 'code') {
         $('#code').replaceWith('<script id="code">function draw() {}; p5reset();' + obj.data + '\nproductionize(this);</script>')
-      } else if(obj.type == 'imageRequest') {
+      } else if (obj.type === 'imageRequest') {
         let canvas = $('canvas')[0]
         let data = canvas.toDataURL('image/png')
         socket.send(JSON.stringify({
           'type': 'imageData',
           'mimeType': 'png',
-          'data': data 
+          'data': data
         }))
       }
     }
