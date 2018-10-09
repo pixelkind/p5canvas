@@ -66,7 +66,6 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let disposableSaveAsPNG = vscode.commands.registerCommand('extension.saveAsPNG', () => {
-        // console.log(ImageType.png.toString());
         websocket.sendImageRequest(ImageType.png);
     });
 
