@@ -2,6 +2,11 @@
 
 import * as vscode from 'vscode';
 import * as WebSocket from 'ws';
+import * as fs from 'fs';
+
+export enum ImageType {
+    png = 'png',
+}
 
 export class WebSocketServer {
 
@@ -29,16 +34,53 @@ export class WebSocketServer {
 
                 // Listening for incomming messages
                 this.websocket.on('message', (data) => {
-                    this.channel.appendLine(data);
+                    let obj = JSON.parse(data)
+                    if (obj.type == 'log') {
+                        this.channel.appendLine(obj.msg);
+                    } else if (obj.type == 'imageData') {
+                        if (obj.mimeType == 'png') {
+                            let imageData = obj.data.replace(/^data:image\/png;base64,/, "");
+                            let options = {
+                                'filters': {
+                                    'Images': ['png']
+                                };
+                            }
+                            vscode.window.showSaveDialog(options).then((result) => {
+                                if (result) {
+                                    let path = result.path;
+                                    fs.writeFile(path, imageData, 'base64', (err) => {
+                                        if (err) {
+                                            vscode.window.showErrorMessage('Error saving the file: ' + err);
+                                        } else {
+                                            vscode.window.showInformationMessage('The file has been saved.');
+                                        }
+                                    });
+                                }
+                            });
+
+                        }
+                    }
                 });
             });
 
         });
     }
 
-    public send(code: string) {
+    public sendCode(code: string) {
         if (this.websocket != undefined) {
-            this.websocket.send(code);
+            this.websocket.send(JSON.stringify({
+                'type': 'code',
+                'data': code
+            }));
+        }
+    }
+
+    public sendImageRequest(type: ImageType) {
+        if (this.websocket != undefined) {
+            this.websocket.send(JSON.stringify({
+                'type': 'imageRequest', 
+                'mimeType': type.toString()
+            }));
         }
     }
 

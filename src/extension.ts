@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import { TextDocumentContentProvider } from './TextDocumentContentProvider';
-import { WebSocketServer } from './WebSocketServer';
+import { WebSocketServer, ImageType } from './WebSocketServer';
 import { JSHINT } from 'jshint';
 
 var websocket: WebSocketServer;
@@ -65,7 +65,11 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    context.subscriptions.push(disposable, statusBarItem);
+    let disposableSaveAsPNG = vscode.commands.registerCommand('extension.saveAsPNG', () => {
+        websocket.sendImageRequest(ImageType.png);
+    });
+
+    context.subscriptions.push(disposable, statusBarItem, disposableSaveAsPNG);
 }
 
 function updateCode(editor, websocket, outputChannel) {
@@ -78,7 +82,7 @@ function updateCode(editor, websocket, outputChannel) {
 
     if (JSHINT.errors.length == 0) {
         outputChannel.clear();
-        websocket.send(text);
+        websocket.sendCode(text);
     } else {
         let message = "🙊 Errors:\n";
         JSHINT.errors.forEach(element => {

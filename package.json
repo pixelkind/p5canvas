@@ -15,6 +15,14 @@
         "onLanguage:javascript"
     ],
     "main": "./out/src/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.saveAsPNG",
+                "title": "Saves the current canvas as .png"
+            }
+        ]
+    },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "compile": "tsc -watch -p ./",
@@ -48,6 +56,10 @@
         {
             "name": "Davide Becker",
             "url": "https://github.com/DavideBecker"
+        },
+        {
+            "name": "Silvia Hundegger",
+            "url": "https://github.com/silvia77"
         }
     ],
     "author": {
