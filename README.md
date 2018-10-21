@@ -22,15 +22,15 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+## 1.0.8
+
+- New Save as PNG command
+- Updated dependencies
+
 ### 1.0.7
 
 - Fixed a bug, where the linting was done in all kind of files
 - Fixed a bug with the p5 sound library and added relative paths for `loadSound`
-
-### 1.0.6
-
-- Fixed a bug, where the p5 static-object was no longer available globally
-- Added support for loading images via a relative path
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 
