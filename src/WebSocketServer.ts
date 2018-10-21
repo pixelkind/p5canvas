@@ -43,7 +43,7 @@ export class WebSocketServer {
                             let options = {
                                 'filters': {
                                     'Images': ['png']
-                                };
+                                }
                             }
                             vscode.window.showSaveDialog(options).then((result) => {
                                 if (result) {
