@@ -47,7 +47,7 @@ function updateRulers(event) {
     }
 
     hRulerContext.fillStyle = '#333333'
-    hRulerContext.font = '8px sans-serif'
+    hRulerContext.font = '9px sans-serif'
     hRulerContext.textBaseline = 'top'
 
     for (var x = 0; x < hRulerCanvas.width; x += 100) {
@@ -56,7 +56,9 @@ function updateRulers(event) {
         hRulerContext.lineTo(x - 0.5, 0)
         hRulerContext.stroke()
 
-        hRulerContext.fillText(x.toFixed(0), x + 3, 1)
+        if (x > 0) {
+            hRulerContext.fillText(x.toFixed(0), x + 3, 1)
+        }
     }
 
     let hRulerCanvasRect = hRulerCanvas.getBoundingClientRect()
@@ -91,11 +93,23 @@ function updateRulers(event) {
         vRulerContext.stroke()
     }
 
+    vRulerContext.fillStyle = '#333333'
+    vRulerContext.font = '9px sans-serif'
+    vRulerContext.textBaseline = 'top'
+
     for (var y = p5rulersize; y < vRulerCanvas.height; y += 100) {
         vRulerContext.beginPath()
         vRulerContext.moveTo(p5rulersize, y - 0.5)
         vRulerContext.lineTo(0, y - 0.5)
         vRulerContext.stroke()
+
+        if (y > p5rulersize) {
+            vRulerContext.save()
+            vRulerContext.translate(0, y)
+            vRulerContext.rotate(-Math.PI/2)
+            vRulerContext.fillText((y - p5rulersize).toFixed(0), 3, 1)
+            vRulerContext.restore()
+        }
     }
 
     vRulerContext.strokeStyle = '#FF0000'
