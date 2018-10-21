@@ -14,52 +14,115 @@ function setupRulers() {
     vRulerCanvas.width = vRulerCanvas.offsetWidth;
     vRulerCanvas.height = vRulerCanvas.offsetHeight;
 
-    vRulerContext.fillStyle = '#FFFFFF'
-    vRulerContext.fillRect(0, 0, vRulerCanvas.width, vRulerCanvas.height)
+    drawHorizontalRuler()
+    drawVerticalRuler()
 
-    hRulerContext.fillStyle = '#FFFFFF'
-    hRulerContext.fillRect(0, 0, hRulerCanvas.width, hRulerCanvas.height)
+    window.addEventListener('resize', updateWindowSize)
 }
 
-function updateRulers(event) {
-    hRulerContext.fillStyle = '#FFFFFF'
-    hRulerContext.fillRect(0, 0, hRulerCanvas.width, hRulerCanvas.height)
+function updateWindowSize() {
+    hRulerCanvas.width = hRulerCanvas.offsetWidth;
+    hRulerCanvas.height = hRulerCanvas.offsetHeight;
 
-    hRulerContext.strokeStyle = '#333333'
-    hRulerContext.lineWidth = 1
-    hRulerContext.beginPath()
-    hRulerContext.moveTo(0, p5rulersize)
-    hRulerContext.lineTo(hRulerCanvas.width, p5rulersize)
-    hRulerContext.stroke()
+    vRulerCanvas.width = vRulerCanvas.offsetWidth;
+    vRulerCanvas.height = vRulerCanvas.offsetHeight;
+
+    drawHorizontalRuler()
+    drawVerticalRuler()
+}
+
+function drawHorizontalRuler() {
+    var ctx = hRulerContext
+
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillRect(0, 0, hRulerCanvas.width, hRulerCanvas.height)
+
+    ctx.strokeStyle = '#333333'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(0, p5rulersize)
+    ctx.lineTo(hRulerCanvas.width, p5rulersize)
+    ctx.stroke()
 
     for (var x = 0; x < hRulerCanvas.width; x += 5) {
-        hRulerContext.beginPath()
-        hRulerContext.moveTo(x - 0.5, p5rulersize)
-        hRulerContext.lineTo(x - 0.5, p5rulersize - 4)
-        hRulerContext.stroke()
+        ctx.beginPath()
+        ctx.moveTo(x - 0.5, p5rulersize)
+        ctx.lineTo(x - 0.5, p5rulersize - 4)
+        ctx.stroke()
     }
 
     for (var x = 0; x < hRulerCanvas.width; x += 10) {
-        hRulerContext.beginPath()
-        hRulerContext.moveTo(x - 0.5, p5rulersize)
-        hRulerContext.lineTo(x - 0.5, p5rulersize - 7)
-        hRulerContext.stroke()
+        ctx.beginPath()
+        ctx.moveTo(x - 0.5, p5rulersize)
+        ctx.lineTo(x - 0.5, p5rulersize - 7)
+        ctx.stroke()
     }
 
-    hRulerContext.fillStyle = '#333333'
-    hRulerContext.font = '9px sans-serif'
-    hRulerContext.textBaseline = 'top'
+    ctx.fillStyle = '#333333'
+    ctx.font = '9px sans-serif'
+    ctx.textBaseline = 'top'
 
     for (var x = 0; x < hRulerCanvas.width; x += 100) {
-        hRulerContext.beginPath()
-        hRulerContext.moveTo(x - 0.5, p5rulersize)
-        hRulerContext.lineTo(x - 0.5, 0)
-        hRulerContext.stroke()
+        ctx.beginPath()
+        ctx.moveTo(x - 0.5, p5rulersize)
+        ctx.lineTo(x - 0.5, 0)
+        ctx.stroke()
 
         if (x > 0) {
-            hRulerContext.fillText(x.toFixed(0), x + 3, 1)
+            ctx.fillText(x.toFixed(0), x + 3, 1)
         }
     }
+}
+
+function drawVerticalRuler() {
+    var ctx = vRulerContext
+
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillRect(0, 0, vRulerCanvas.width, vRulerCanvas.height)
+
+    ctx.strokeStyle = '#333333'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(p5rulersize, 0)
+    ctx.lineTo(p5rulersize, vRulerCanvas.height)
+    ctx.stroke()
+
+    for (var y = p5rulersize; y < vRulerCanvas.height; y += 5) {
+        ctx.beginPath()
+        ctx.moveTo(p5rulersize, y - 0.5)
+        ctx.lineTo(p5rulersize - 4, y - 0.5)
+        ctx.stroke()
+    }
+
+    for (var y = p5rulersize; y < vRulerCanvas.height; y += 10) {
+        ctx.beginPath()
+        ctx.moveTo(p5rulersize, y - 0.5)
+        ctx.lineTo(p5rulersize - 7, y - 0.5)
+        ctx.stroke()
+    }
+
+    ctx.fillStyle = '#333333'
+    ctx.font = '9px sans-serif'
+    ctx.textBaseline = 'top'
+
+    for (var y = p5rulersize; y < vRulerCanvas.height; y += 100) {
+        ctx.beginPath()
+        ctx.moveTo(p5rulersize, y - 0.5)
+        ctx.lineTo(0, y - 0.5)
+        ctx.stroke()
+
+        if (y > p5rulersize) {
+            ctx.save()
+            ctx.translate(0, y)
+            ctx.rotate(-Math.PI/2)
+            ctx.fillText((y - p5rulersize).toFixed(0), 3, 1)
+            ctx.restore()
+        }
+    }
+}
+
+function updateRulers(event) {
+    drawHorizontalRuler()
 
     let hRulerCanvasRect = hRulerCanvas.getBoundingClientRect()
 
@@ -69,48 +132,7 @@ function updateRulers(event) {
     hRulerContext.lineTo(event.pageX - hRulerCanvasRect.left - 0.5, p5rulersize)
     hRulerContext.stroke()
 
-    vRulerContext.fillStyle = '#FFFFFF'
-    vRulerContext.fillRect(0, 0, vRulerCanvas.width, vRulerCanvas.height)
-
-    vRulerContext.strokeStyle = '#333333'
-    vRulerContext.lineWidth = 1
-    vRulerContext.beginPath()
-    vRulerContext.moveTo(p5rulersize, 0)
-    vRulerContext.lineTo(p5rulersize, vRulerCanvas.height)
-    vRulerContext.stroke()
-
-    for (var y = p5rulersize; y < vRulerCanvas.height; y += 5) {
-        vRulerContext.beginPath()
-        vRulerContext.moveTo(p5rulersize, y - 0.5)
-        vRulerContext.lineTo(p5rulersize - 4, y - 0.5)
-        vRulerContext.stroke()
-    }
-
-    for (var y = p5rulersize; y < vRulerCanvas.height; y += 10) {
-        vRulerContext.beginPath()
-        vRulerContext.moveTo(p5rulersize, y - 0.5)
-        vRulerContext.lineTo(p5rulersize - 7, y - 0.5)
-        vRulerContext.stroke()
-    }
-
-    vRulerContext.fillStyle = '#333333'
-    vRulerContext.font = '9px sans-serif'
-    vRulerContext.textBaseline = 'top'
-
-    for (var y = p5rulersize; y < vRulerCanvas.height; y += 100) {
-        vRulerContext.beginPath()
-        vRulerContext.moveTo(p5rulersize, y - 0.5)
-        vRulerContext.lineTo(0, y - 0.5)
-        vRulerContext.stroke()
-
-        if (y > p5rulersize) {
-            vRulerContext.save()
-            vRulerContext.translate(0, y)
-            vRulerContext.rotate(-Math.PI/2)
-            vRulerContext.fillText((y - p5rulersize).toFixed(0), 3, 1)
-            vRulerContext.restore()
-        }
-    }
+    drawVerticalRuler()
 
     vRulerContext.strokeStyle = '#FF0000'
     vRulerContext.beginPath()
