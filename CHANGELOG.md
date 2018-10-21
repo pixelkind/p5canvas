@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.0.8
+
+- New Save as PNG command
+- Updated dependencies
+
 ## 1.0.7
 
 - Fixed a bug, where the linting was done in all kind of files
