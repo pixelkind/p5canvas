@@ -56,6 +56,10 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
         elements.push(errorHandler);
         let localPathJs = '<script>window.localPath = "' + localPath + '";</script>';
         elements.push(localPathJs);
+        let jsRulerFile: string = '<script src="' + extensionPath + '/assets/ruler.js"></script>';
+        elements.push(jsRulerFile);
+        let jsRuler = '<script>var p5rulersize = 20</script>'
+        elements.push(jsRuler);
         let js = '<script id="code"></script>';
         elements.push(js);
         elements.push(htmlbody);

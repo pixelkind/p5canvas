@@ -21,13 +21,14 @@ function setup() {
     return sound
   }
 
-  createCanvas(windowWidth, windowHeight)
+  var p5canvas = createCanvas(windowWidth-p5rulersize, windowHeight-p5rulersize)
+  p5canvas.parent('p5canvas')
   frameRate(30)
   clear()
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight)
+  resizeCanvas(windowWidth-p5rulersize, windowHeight-p5rulersize)
   clear()
 }
 

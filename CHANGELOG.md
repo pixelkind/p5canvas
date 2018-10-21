@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.1.0
+
+- Adding Rulers for easier navigation
+
 ## 1.0.8
 
 - New Save as PNG command
