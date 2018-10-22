@@ -19,7 +19,7 @@
         "commands": [
             {
                 "command": "extension.saveAsPNG",
-                "title": "Saves the current canvas as .png"
+                "title": "Saves the current p5canvas as PNG"
             }
         ]
     },

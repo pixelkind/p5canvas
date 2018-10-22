@@ -22,7 +22,7 @@ function setupWebsocket (server) {
       if (obj.type === 'code') {
         $('#code').replaceWith('<script id="code">function draw() {}; p5reset();' + obj.data + '\nproductionize(this);</script>')
       } else if (obj.type === 'imageRequest') {
-        let canvas = $('canvas')[0]
+        let canvas = document.getElementById('p5canvas').firstChild
         let data = canvas.toDataURL('image/png')
         socket.send(JSON.stringify({
           'type': 'imageData',
