@@ -47,7 +47,7 @@ export class WebSocketServer {
                             }
                             vscode.window.showSaveDialog(options).then((result) => {
                                 if (result) {
-                                    let path = result.path;
+                                    let path = result.fsPath;
                                     fs.writeFile(path, imageData, 'base64', (err) => {
                                         if (err) {
                                             vscode.window.showErrorMessage('Error saving the file: ' + err);

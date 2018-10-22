@@ -2,7 +2,7 @@
     "name": "p5canvas",
     "displayName": "p5canvas",
     "description": "Live preview for p5js coding",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "publisher": "garrit",
     "engines": {
         "vscode": "^1.20.1"
@@ -19,7 +19,7 @@
         "commands": [
             {
                 "command": "extension.saveAsPNG",
-                "title": "Saves the current canvas as .png"
+                "title": "Saves the current p5canvas as PNG"
             }
         ]
     },
