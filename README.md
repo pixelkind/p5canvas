@@ -11,6 +11,7 @@ There is a standard setup script included which setups a full width/height canva
 - Side Preview while editing the JavaScript file
 - JSHint integration to find errors
 - Loading images with relative path
+- Saving the current canvas as PNG (as a command)
 
 ## Usage
 
@@ -22,14 +23,15 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.1.1
+
+- Fixes a bug not saving the canvas under Windows
+- Fixes a bug with the new ruler-layout and saving the canvas
+- Resets the strokeWeight on every Code-Reload
+
 ### 1.1.0
 
 - Adding Rulers for easier navigation
-
-### 1.0.8
-
-- New Save as PNG command
-- Updated dependencies
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 

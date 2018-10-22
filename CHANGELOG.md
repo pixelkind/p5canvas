@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.1.1
+
+- Fixes a bug not saving the canvas under Windows
+- Fixes a bug with the new ruler-layout and saving the canvas
+- Resets the strokeWeight on every Code-Reload
+
 ## 1.1.0
 
 - Adding Rulers for easier navigation
