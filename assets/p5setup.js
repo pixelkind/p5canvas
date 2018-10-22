@@ -36,6 +36,7 @@ function p5reset() {
   clear()
   fill(255, 255, 255)
   stroke(0, 0, 0)
+  strokeWeight(1)
   textSize(12)
   sounds.forEach((sound) => { sound.stop() })
   sounds = [];
