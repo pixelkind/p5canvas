@@ -67,7 +67,7 @@ export class WebSocketServer {
     }
 
     public sendCode(code: string) {
-        if (this.websocket != undefined) {
+        if (this.websocket != undefined && this.websocket.readyState == WebSocket.OPEN) {
             this.websocket.send(JSON.stringify({
                 'type': 'code',
                 'data': code
@@ -76,7 +76,7 @@ export class WebSocketServer {
     }
 
     public sendImageRequest(type: ImageType) {
-        if (this.websocket != undefined) {
+        if (this.websocket != undefined && this.websocket.readyState == WebSocket.OPEN) {
             this.websocket.send(JSON.stringify({
                 'type': 'imageRequest', 
                 'mimeType': type.toString()
