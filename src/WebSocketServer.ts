@@ -85,7 +85,11 @@ export class WebSocketServer {
     }
 
     dispose() {
+        this.websocket.close();
         this.websocket.dispose();
+        this.channel = null;
+        this.websocket = null;
+        this.socket = null;
     }
 
 }

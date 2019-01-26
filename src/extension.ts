@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }
 
-    vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
+    let changeTextDocument = vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
 		if (e && e.document && vscode.window.activeTextEditor != undefined && e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
             let editor = vscode.window.activeTextEditor;
             if (editor) {
@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
     });
     
-    vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
+    let didChangeActiveEditor = vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
         if (e && e.document && e.document.languageId == 'javascript') {
             statusBarItem.show();
             let editor = vscode.window.activeTextEditor;
@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
         websocket.sendImageRequest(ImageType.png);
     });
 
-    context.subscriptions.push(disposable, statusBarItem, disposableSaveAsPNG);
+    context.subscriptions.push(disposable, statusBarItem, disposableSaveAsPNG, changeTextDocument, didChangeActiveEditor, outputChannel, registration);
 }
 
 function updateCode(editor, websocket, outputChannel) {
@@ -95,4 +95,6 @@ function updateCode(editor, websocket, outputChannel) {
 
 export function deactivate() {
     websocket.dispose();
+    websocket = null;
+    return undefined;
 }
