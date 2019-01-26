@@ -35,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
-		if (e && e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
+		if (e && e.document && vscode.window.activeTextEditor != undefined && e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
             let editor = vscode.window.activeTextEditor;
             if (editor) {
                 lastKnownEditor = editor;
@@ -45,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
     
     vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
-        if (e && e.document.languageId == 'javascript') {
+        if (e && e.document && e.document.languageId == 'javascript') {
             statusBarItem.show();
             let editor = vscode.window.activeTextEditor;
             if (editor) {
