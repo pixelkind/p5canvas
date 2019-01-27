@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.1.2
+
+- Workaround for a bug where the p5canvas crashes and can not be re-opened
+
 ## 1.1.1
 
 - Fixes a bug not saving the canvas under Windows
