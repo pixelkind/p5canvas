@@ -6,11 +6,9 @@ import { WebSocketServer, ImageType } from './WebSocketServer';
 import { JSHINT } from 'jshint';
 
 var websocket: WebSocketServer;
+var counter: number = 0;
 
 export function activate(context: vscode.ExtensionContext) {
-    
-    let previewUri = vscode.Uri.parse('p5canvas://authority/p5canvas');
-
     let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     statusBarItem.text = `$(file-media) p5canvas`;
     statusBarItem.command = 'extension.showCanvas';
@@ -58,7 +56,9 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let disposable = vscode.commands.registerCommand('extension.showCanvas', () => {
-        vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'p5canvas').then((success) => {
+        let uri = vscode.Uri.parse('p5canvas://authority/p5canvas' + counter);
+        counter++;
+        vscode.commands.executeCommand('vscode.previewHtml', uri, vscode.ViewColumn.Two, 'p5canvas').then((success) => {
             
         }, (reason) => {
             vscode.window.showErrorMessage(reason);
