@@ -33,6 +33,9 @@ export class TextDocumentContentProvider implements vscode.TextDocumentContentPr
         if (os.platform() == 'win32') {
             fileDesc += 'localhost/';
         }
+        if (!vscode.window.activeTextEditor) {
+            return this.errorHtml("An error occured...");
+        }
         // has to be changed everytime the window reloads
         let localPath = encodeURI(fileDesc + path.dirname(vscode.window.activeTextEditor.document.uri.fsPath) + path.sep);
 

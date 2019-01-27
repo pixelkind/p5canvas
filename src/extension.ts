@@ -6,11 +6,9 @@ import { WebSocketServer, ImageType } from './WebSocketServer';
 import { JSHINT } from 'jshint';
 
 var websocket: WebSocketServer;
+var counter: number = 0;
 
 export function activate(context: vscode.ExtensionContext) {
-    
-    let previewUri = vscode.Uri.parse('p5canvas://authority/p5canvas');
-
     let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     statusBarItem.text = `$(file-media) p5canvas`;
     statusBarItem.command = 'extension.showCanvas';
@@ -34,8 +32,8 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }
 
-    vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
-		if (e && e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
+    let changeTextDocument = vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
+		if (e && e.document && vscode.window.activeTextEditor != undefined && e.document === vscode.window.activeTextEditor.document && e.document.languageId == 'javascript') {
             let editor = vscode.window.activeTextEditor;
             if (editor) {
                 lastKnownEditor = editor;
@@ -44,8 +42,8 @@ export function activate(context: vscode.ExtensionContext) {
 		}
     });
     
-    vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
-        if (e && e.document.languageId == 'javascript') {
+    let didChangeActiveEditor = vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
+        if (e && e.document && e.document.languageId == 'javascript') {
             statusBarItem.show();
             let editor = vscode.window.activeTextEditor;
             if (editor) {
@@ -58,7 +56,9 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let disposable = vscode.commands.registerCommand('extension.showCanvas', () => {
-        vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'p5canvas').then((success) => {
+        let uri = vscode.Uri.parse('p5canvas://authority/p5canvas' + counter);
+        counter++;
+        vscode.commands.executeCommand('vscode.previewHtml', uri, vscode.ViewColumn.Two, 'p5canvas').then((success) => {
             
         }, (reason) => {
             vscode.window.showErrorMessage(reason);
@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
         websocket.sendImageRequest(ImageType.png);
     });
 
-    context.subscriptions.push(disposable, statusBarItem, disposableSaveAsPNG);
+    context.subscriptions.push(disposable, statusBarItem, disposableSaveAsPNG, changeTextDocument, didChangeActiveEditor, outputChannel, registration);
 }
 
 function updateCode(editor, websocket, outputChannel) {
@@ -95,4 +95,6 @@ function updateCode(editor, websocket, outputChannel) {
 
 export function deactivate() {
     websocket.dispose();
+    websocket = null;
+    return undefined;
 }
