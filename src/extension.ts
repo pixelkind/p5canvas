@@ -103,12 +103,15 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-function updateCode(editor, websocket, outputChannel) {
+function updateCode(editor, websocket, outputChannel, es6 = false) {
   if (!editor) {
     console.log("Error: No document found");
     return;
   }
   let text = editor.document.getText();
+  if (es6) {
+    text = "/*jshint esversion: 6 */" + text;
+  }
   JSHINT(text);
 
   if (JSHINT.errors.length == 0) {
@@ -116,11 +119,19 @@ function updateCode(editor, websocket, outputChannel) {
     websocket.sendCode(text);
   } else {
     let message = "🙊 Errors:\n";
+
+    let es6error = false;
     JSHINT.errors.forEach(element => {
       message += `Line ${element.line}, col ${element.character}: ${element.reason}\n`;
+      if (element.reason.contains("available in ES6 (use 'esversion: 6')")) {
+        es6error = true;
+      }
     });
     outputChannel.clear();
     outputChannel.append(message);
+    if (es6error) {
+      updateCode(editor, websocket, outputChannel, true);
+    }
   }
 }
 
