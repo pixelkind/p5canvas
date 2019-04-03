@@ -1,5 +1,10 @@
 # Change Log
+
 All notable changes to the "p5canvas" extension will be documented in this file.
+
+## 1.2.0
+
+- Using the new WebView API
 
 ## 1.1.2
 
@@ -55,4 +60,5 @@ All notable changes to the "p5canvas" extension will be documented in this file.
 - Cleans the output channel after every reload
 
 ## 1.0.0
+
 - Initial release
