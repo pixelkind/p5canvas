@@ -3,6 +3,7 @@
 The p5canvas extensions allows you to preview your p5js code in a canvas side by side with your code. The canvas refreshes live, while editing.
 
 ![Example Screenshot](images/example_01.png)
+Image by Quynh Han Tran
 
 There is a standard setup script included which setups a full width/height canvas that will be resized automatically. In one of the next versions this will become optional.
 
@@ -23,6 +24,10 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.2.0
+
+- Using the new WebView API
+
 ### 1.1.2
 
 - Workaround for a bug where the p5canvas crashes and can not be re-opened
@@ -32,10 +37,6 @@ There are currently no known issues. If you find any issues, please feel free, t
 - Fixes a bug not saving the canvas under Windows
 - Fixes a bug with the new ruler-layout and saving the canvas
 - Resets the strokeWeight on every Code-Reload
-
-### 1.1.0
-
-- Adding Rulers for easier navigation
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 
