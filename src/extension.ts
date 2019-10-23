@@ -1,7 +1,6 @@
 "use strict";
 
 import * as vscode from "vscode";
-import {TextDocumentContentProvider} from "./TextDocumentContentProvider";
 import {WebSocketServer, ImageType} from "./WebSocketServer";
 import {JSHINT} from "jshint";
 import * as path from "path";
@@ -18,13 +17,9 @@ export function activate(context: vscode.ExtensionContext) {
   statusBarItem.command = "extension.showCanvas";
   statusBarItem.show();
 
-  let provider = new TextDocumentContentProvider();
-  let registration = vscode.workspace.registerTextDocumentContentProvider("p5canvas", provider);
-
   let outputChannel = vscode.window.createOutputChannel("p5canvas console");
   websocket = new WebSocketServer(outputChannel);
   websocket.onListening = () => {
-    provider.server = websocket.url;
     server = websocket.url;
   };
 
@@ -98,8 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
     disposableSaveAsPNG,
     changeTextDocument,
     didChangeActiveEditor,
-    outputChannel,
-    registration
+    outputChannel
   );
 }
 
