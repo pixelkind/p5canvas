@@ -2,7 +2,7 @@
   "name": "p5canvas",
   "displayName": "p5canvas",
   "description": "Live preview for p5js coding",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "publisher": "garrit",
   "engines": {
     "vscode": "^1.26.0"

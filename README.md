@@ -24,6 +24,10 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.3.0
+
+- Making JavaScript ES 6 the default
+
 ### 1.2.0
 
 - Using the new WebView API
@@ -31,12 +35,6 @@ There are currently no known issues. If you find any issues, please feel free, t
 ### 1.1.2
 
 - Workaround for a bug where the p5canvas crashes and can not be re-opened
-
-### 1.1.1
-
-- Fixes a bug not saving the canvas under Windows
-- Fixes a bug with the new ruler-layout and saving the canvas
-- Resets the strokeWeight on every Code-Reload
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 

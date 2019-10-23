@@ -2,6 +2,10 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.3.0
+
+- Making JavaScript ES 6 the default
+
 ## 1.2.0
 
 - Using the new WebView API
