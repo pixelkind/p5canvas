@@ -9,9 +9,9 @@ import * as fs from "fs";
 var websocket: WebSocketServer;
 var counter: number = 0;
 let server: string = "";
+let currentPanel: vscode.WebviewPanel | undefined = undefined;
 
 export function activate(context: vscode.ExtensionContext) {
-  let currentPanel: vscode.WebviewPanel | undefined = undefined;
   let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
   statusBarItem.text = `$(file-media) p5canvas`;
   statusBarItem.command = "extension.showCanvas";
@@ -110,7 +110,7 @@ function updateCode(editor, websocket, outputChannel) {
 
   if (JSHINT.errors.length == 0) {
     outputChannel.clear();
-    websocket.sendCode(text);
+    currentPanel.webview.html = getWebviewContent(text);
   } else {
     let message = "🙊 Errors:\n";
 
@@ -123,7 +123,7 @@ function updateCode(editor, websocket, outputChannel) {
   }
 }
 
-function getWebviewContent() {
+function getWebviewContent(code: String = "") {
   let extensionPath = vscode.Uri.file(vscode.extensions.getExtension("garrit.p5canvas").extensionPath).with({
     scheme: "vscode-resource"
   });
@@ -146,7 +146,6 @@ function getWebviewContent() {
       <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/ruler.js"></script>
       <script>var p5rulersize = 20</script>
-      <script id="code"></script>
       <style>
       html {
           height: 100%;
@@ -184,6 +183,7 @@ function getWebviewContent() {
         <canvas id="ruler-horizontal"></canvas>
         <div id="p5canvas"></div>
       </div>
+      <script id="code">${code}</script>
     </body>
   </html>
   `;

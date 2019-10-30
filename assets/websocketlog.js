@@ -1,35 +1,57 @@
-function setupWebsocket (server) {
-  const socket = new WebSocket(server)
+let logs = [];
+let socket;
+function setupWebsocket(server) {
+  socket = new WebSocket(server);
 
-  socket.onerror = (error) => {
-    console.log(error)
+  socket.onerror = error => {
+    console.log(error);
+  };
+
+  socket.onopen = event => {
+    for (index in logs) {
+      sendLog(logs[index]);
+    }
+    logs = [];
+
+    socket.onmessage = event => {
+      let obj = JSON.parse(event.data);
+      if (obj.type === "imageRequest") {
+        let canvas = document.getElementById("p5canvas").firstChild;
+        let data = canvas.toDataURL("image/png");
+        socket.send(
+          JSON.stringify({
+            type: "imageData",
+            mimeType: "png",
+            data: data
+          })
+        );
+      }
+    };
+  };
+}
+
+window.console.log = msg => {
+  if (typeof msg === "object") {
+    msg = JSON.stringify(msg, null, 4);
   }
 
-  socket.onopen = (event) => {
-    window.console.log = (msg) => {
-      if (typeof msg === 'object') {
-        msg = JSON.stringify(msg, null, 4)
-      }
-
-      socket.send(JSON.stringify({
-        'type': 'log',
-        'msg': msg
-      }))
-    }
-
-    socket.onmessage = (event) => {
-      let obj = JSON.parse(event.data)
-      if (obj.type === 'code') {
-        $('#code').replaceWith('<script id="code">function draw() {}; p5reset();' + obj.data + '\nproductionize(this);</script>')
-      } else if (obj.type === 'imageRequest') {
-        let canvas = document.getElementById('p5canvas').firstChild
-        let data = canvas.toDataURL('image/png')
-        socket.send(JSON.stringify({
-          'type': 'imageData',
-          'mimeType': 'png',
-          'data': data
-        }))
-      }
-    }
+  if (socket.isOpen) {
+    sendLog(msg);
+  } else {
+    logs.push(msg);
   }
+};
+window.console.debug = window.console.log;
+window.console.error = window.console.log;
+window.console.info = window.console.log;
+window.console.trace = window.console.log;
+window.console.warn = window.console.log;
+
+function sendLog(msg) {
+  socket.send(
+    JSON.stringify({
+      type: "log",
+      msg: msg
+    })
+  );
 }
