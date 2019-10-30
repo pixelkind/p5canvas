@@ -35,7 +35,26 @@ export class WebSocketServer {
         this.websocket.on("message", data => {
           let obj = JSON.parse(data);
           if (obj.type == "log") {
-            this.channel.appendLine(obj.msg);
+            switch (obj.logType) {
+              case "warn":
+                this.channel.appendLine("⚠️: " + obj.msg);
+                return;
+              case "error":
+                this.channel.appendLine("🚫: " + obj.msg);
+                return;
+              case "debug":
+                this.channel.appendLine("❗️: " + obj.msg);
+                return;
+              case "trace":
+                this.channel.appendLine("🔎: " + obj.msg);
+                return;
+              case "info":
+                this.channel.appendLine("ℹ️: " + obj.msg);
+                return;
+              case "log":
+                this.channel.appendLine(obj.msg);
+                return;
+            }
           } else if (obj.type == "imageData") {
             if (obj.mimeType == "png") {
               let imageData = obj.data.replace(/^data:image\/png;base64,/, "");
