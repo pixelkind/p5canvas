@@ -13,6 +13,7 @@ There is a standard setup script included which setups a full width/height canva
 - JSHint integration to find errors
 - Loading images with relative path
 - Saving the current canvas as PNG (as a command)
+- Fully ES 6 compatible
 
 ## Usage
 
@@ -24,6 +25,13 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.4.0
+
+- Always reloads the full canvas
+- Enable all log levels
+- Some improvements for ES 6 usage
+- Cleaned up codebase
+
 ### 1.3.0
 
 - Making JavaScript ES 6 the default
@@ -31,10 +39,6 @@ There are currently no known issues. If you find any issues, please feel free, t
 ### 1.2.0
 
 - Using the new WebView API
-
-### 1.1.2
-
-- Workaround for a bug where the p5canvas crashes and can not be re-opened
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 

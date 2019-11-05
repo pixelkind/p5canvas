@@ -2,6 +2,13 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.4.0
+
+- Always reloads the full canvas
+- Enable all log levels
+- Some improvements for ES 6 usage
+- Cleaned up codebase
+
 ## 1.3.0
 
 - Making JavaScript ES 6 the default
