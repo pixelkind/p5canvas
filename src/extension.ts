@@ -137,11 +137,8 @@ function getWebviewContent(code: String = "") {
   <html>
     <head>
       <script src="${extensionPath}/assets/p5.min.js"></script>
-      <script src="${extensionPath}/assets/p5.sound.min.js"></script>
-      <script src="${extensionPath}/assets/jquery-3.2.1.min.js"></script>
       <script src="${extensionPath}/assets/websocketlog.js">
       </script><script>setupWebsocket("${server}");</script>
-      <script src="${extensionPath}/assets/errorHandler.js"></script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
       <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/ruler.js"></script>
@@ -183,7 +180,23 @@ function getWebviewContent(code: String = "") {
         <canvas id="ruler-horizontal"></canvas>
         <div id="p5canvas"></div>
       </div>
-      <script id="code">${code}</script>
+      <script id="code">setTimeout(() => {
+        ${code}
+        window.draw = draw;
+        window.keyPressed = keyPressed;
+        window.keyReleased = keyReleased;
+        window.keyTyped = keyTyped;
+        window.mousePressed = mousePressed;
+        window.mouseReleased = mouseReleased;
+        window.mouseClicked = mouseClicked;
+        window.doubleClicked = doubleClicked;
+        window.mouseDragged = mouseDragged;
+        window.mouseMoved = mouseMoved;
+        window.mouseWheel = mouseWheel;
+        window.touchesStarted = touchesStarted;
+        window.touchesMoved = touchesMoved;
+        window.touchesEnded = touchesEnded;
+      }, 1);</script>
     </body>
   </html>
   `;
