@@ -12,21 +12,21 @@ function setupWebsocket(server) {
       sendLog(logs[index].msg, logs[index].type);
     }
     logs = [];
+  };
 
-    socket.onmessage = event => {
-      let obj = JSON.parse(event.data);
-      if (obj.type === "imageRequest") {
-        let canvas = document.getElementById("p5canvas").firstChild;
-        let data = canvas.toDataURL("image/png");
-        socket.send(
-          JSON.stringify({
-            type: "imageData",
-            mimeType: "png",
-            data: data
-          })
-        );
-      }
-    };
+  socket.onmessage = event => {
+    let obj = JSON.parse(event.data);
+    if (obj.type === "imageRequest") {
+      let canvas = document.getElementById("p5canvas").firstChild;
+      let data = canvas.toDataURL("image/png");
+      socket.send(
+        JSON.stringify({
+          type: "imageData",
+          mimeType: "png",
+          data: data
+        })
+      );
+    }
   };
 }
 
@@ -35,7 +35,7 @@ function addLog(msg, type) {
     msg = JSON.stringify(msg, null, 4);
   }
 
-  if (socket.isOpen) {
+  if (socket != undefined && socket.readyState === 1) {
     sendLog(msg, type);
   } else {
     logs.push({msg: msg, type: type});
