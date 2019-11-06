@@ -181,6 +181,11 @@ function getWebviewContent(code: String = "") {
         <div id="p5canvas"></div>
       </div>
       <script id="code">setTimeout(() => {
+        var draw;
+        var keyPressed, keyReleased, keyTyped;
+        var mousePressed, mouseReleased, mouseClicked, doubleClicked;
+        var mouseDragged, mouseMoved, mouseWheel;
+        var touchesStarted, touchesMoved, touchesEnded;
         ${code}
         window.draw = draw;
         window.keyPressed = keyPressed;
