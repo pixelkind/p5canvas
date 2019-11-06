@@ -2,6 +2,10 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.4.1
+
+- Bugfix for a problem with events
+
 ## 1.4.0
 
 - Always reloads the full canvas
