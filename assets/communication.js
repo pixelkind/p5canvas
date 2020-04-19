@@ -2,7 +2,6 @@ let vscode;
 
 function setupCommunication() {
   vscode = acquireVsCodeApi();
-
   window.addEventListener("message", (event) => {
     const message = event.data;
 

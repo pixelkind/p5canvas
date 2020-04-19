@@ -4,9 +4,11 @@ import * as vscode from "vscode";
 import {JSHINT} from "jshint";
 import * as path from "path";
 import * as fs from "fs";
+import * as crypto from "crypto";
 
 let outputChannel: vscode.OutputChannel;
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
+let lastCodeHash: String = undefined;
 
 export function activate(context: vscode.ExtensionContext) {
   let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
@@ -89,12 +91,17 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-function updateCode(editor, outputChannel: vscode.OutputChannel) {
+function updateCode(editor: vscode.TextEditor, outputChannel: vscode.OutputChannel) {
   if (!editor) {
     console.log("Error: No document found");
     return;
   }
   let text = editor.document.getText();
+  let hash = crypto.createHash("md5").update(text).digest("hex");
+  if (lastCodeHash === hash) {
+    return;
+  }
+  lastCodeHash = hash;
   let options = {
     esversion: 6,
   };
