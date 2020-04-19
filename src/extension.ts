@@ -5,6 +5,7 @@ import {JSHINT} from "jshint";
 import * as path from "path";
 import * as fs from "fs";
 import * as crypto from "crypto";
+import * as os from "os";
 
 let outputChannel: vscode.OutputChannel;
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
@@ -63,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
       currentPanel = vscode.window.createWebviewPanel("p5canvas", "p5canvas", vscode.ViewColumn.Two, {
         enableScripts: true,
-        localResourceRoots: [extensionPath, localPath],
+        localResourceRoots: [extensionPath, localPath], // Maybe we can remove that
       });
       lastCodeHash = undefined;
       currentPanel.webview.onDidReceiveMessage(handleMessage);
@@ -99,8 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function updateCode(editor: vscode.TextEditor, outputChannel: vscode.OutputChannel) {
-  if (!editor) {
-    console.log("Error: No document found");
+  if (!editor || !currentPanel) {
     return;
   }
   let text = editor.document.getText();
@@ -175,6 +175,28 @@ function handleMessage(message) {
   }
 }
 
+function getImports(localPath: vscode.Uri, code: String = "") {
+  let lines = code.split(os.EOL);
+  let newLines = [];
+  let importedCode = [];
+  lines.forEach((line) => {
+    if (line.indexOf("import ") === 0) {
+      let elements = line.split(" ");
+      let importPath = elements[elements.length - 1];
+      importPath = importPath.slice(1, importPath.length - 2);
+      let filePath = path.resolve(localPath.fsPath, importPath);
+      let file = fs.readFileSync(filePath, "utf8");
+      file = file.replace("export default ", "");
+      file = file.replace("export ", "");
+      importedCode.push(file);
+    } else {
+      newLines.push(line);
+    }
+  });
+  newLines = importedCode.concat(newLines);
+  return newLines.join(os.EOL);
+}
+
 function getWebviewContent(code: String = "") {
   let extensionPath = vscode.Uri.file(vscode.extensions.getExtension("garrit.p5canvas").extensionPath).with({
     scheme: "vscode-resource",
@@ -183,6 +205,8 @@ function getWebviewContent(code: String = "") {
   let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep).with({
     scheme: "vscode-resource",
   });
+
+  code = getImports(vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep), code);
 
   return `
   <!DOCTYPE html>
