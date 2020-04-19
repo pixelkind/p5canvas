@@ -1,15 +1,14 @@
 "use strict";
 
 import * as vscode from "vscode";
-import {WebSocketServer, ImageType} from "./WebSocketServer";
 import {JSHINT} from "jshint";
 import * as path from "path";
 import * as fs from "fs";
+import * as crypto from "crypto";
 
-var websocket: WebSocketServer;
-var counter: number = 0;
-let server: string = "";
+let outputChannel: vscode.OutputChannel;
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
+let lastCodeHash: String = undefined;
 
 export function activate(context: vscode.ExtensionContext) {
   let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
@@ -17,20 +16,8 @@ export function activate(context: vscode.ExtensionContext) {
   statusBarItem.command = "extension.showCanvas";
   statusBarItem.show();
 
-  let outputChannel = vscode.window.createOutputChannel("p5canvas console");
-  websocket = new WebSocketServer(outputChannel);
-  websocket.onListening = () => {
-    server = websocket.url;
-  };
-
+  outputChannel = vscode.window.createOutputChannel("p5canvas console");
   let lastKnownEditor = vscode.window.activeTextEditor;
-
-  websocket.onConnection = () => {
-    outputChannel.show(true);
-    if (lastKnownEditor && lastKnownEditor.document) {
-      updateCode(lastKnownEditor, websocket, outputChannel);
-    }
-  };
 
   let changeTextDocument = vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
     if (
@@ -43,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
       let editor = vscode.window.activeTextEditor;
       if (editor) {
         lastKnownEditor = editor;
-        updateCode(lastKnownEditor, websocket, outputChannel);
+        updateCode(lastKnownEditor, outputChannel);
       }
     }
   });
@@ -54,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
       let editor = vscode.window.activeTextEditor;
       if (editor) {
         lastKnownEditor = editor;
-        updateCode(lastKnownEditor, websocket, outputChannel);
+        updateCode(lastKnownEditor, outputChannel);
       }
     } else {
       statusBarItem.hide();
@@ -65,14 +52,18 @@ export function activate(context: vscode.ExtensionContext) {
   let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path));
 
   let disposable = vscode.commands.registerCommand("extension.showCanvas", () => {
+    outputChannel.show(true);
     if (currentPanel) {
       currentPanel.reveal(vscode.ViewColumn.Two);
     } else {
       currentPanel = vscode.window.createWebviewPanel("p5canvas", "p5canvas", vscode.ViewColumn.Two, {
         enableScripts: true,
-        localResourceRoots: [extensionPath, localPath]
+        localResourceRoots: [extensionPath, localPath],
       });
+      currentPanel.webview.onDidReceiveMessage(handleMessage);
       currentPanel.webview.html = getWebviewContent();
+      updateCode(lastKnownEditor, outputChannel);
+
       currentPanel.onDidDispose(
         () => {
           currentPanel = undefined;
@@ -84,7 +75,10 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   let disposableSaveAsPNG = vscode.commands.registerCommand("extension.saveAsPNG", () => {
-    websocket.sendImageRequest(ImageType.png);
+    currentPanel.webview.postMessage({
+      type: "imageRequest",
+      mimeType: "png",
+    });
   });
 
   context.subscriptions.push(
@@ -97,14 +91,19 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-function updateCode(editor, websocket, outputChannel) {
+function updateCode(editor: vscode.TextEditor, outputChannel: vscode.OutputChannel) {
   if (!editor) {
     console.log("Error: No document found");
     return;
   }
   let text = editor.document.getText();
+  let hash = crypto.createHash("md5").update(text).digest("hex");
+  if (lastCodeHash === hash) {
+    return;
+  }
+  lastCodeHash = hash;
   let options = {
-    esversion: 6
+    esversion: 6,
   };
   JSHINT(text, options);
 
@@ -115,7 +114,7 @@ function updateCode(editor, websocket, outputChannel) {
     let message = "🙊 Errors:\n";
 
     let es6error = false;
-    JSHINT.errors.forEach(element => {
+    JSHINT.errors.forEach((element) => {
       message += `Line ${element.line}, col ${element.character}: ${element.reason}\n`;
     });
     outputChannel.clear();
@@ -123,13 +122,59 @@ function updateCode(editor, websocket, outputChannel) {
   }
 }
 
+function handleMessage(message) {
+  if (message.type == "log") {
+    switch (message.logType) {
+      case "warn":
+        outputChannel.appendLine("⚠️: " + message.msg);
+        return;
+      case "error":
+        outputChannel.appendLine("🚫: " + message.msg);
+        return;
+      case "debug":
+        outputChannel.appendLine("❗️: " + message.msg);
+        return;
+      case "trace":
+        outputChannel.appendLine("🔎: " + message.msg);
+        return;
+      case "info":
+        outputChannel.appendLine("ℹ️: " + message.msg);
+        return;
+      case "log":
+        outputChannel.appendLine(message.msg);
+        return;
+    }
+  } else if (message.type == "imageData") {
+    if (message.mimeType == "png") {
+      let imageData = message.data.replace(/^data:image\/png;base64,/, "");
+      let options = {
+        filters: {
+          Images: ["png"],
+        },
+      };
+      vscode.window.showSaveDialog(options).then((result) => {
+        if (result) {
+          let path = result.fsPath;
+          fs.writeFile(path, imageData, "base64", (err) => {
+            if (err) {
+              vscode.window.showErrorMessage("Error saving the file: " + err);
+            } else {
+              vscode.window.showInformationMessage("The file has been saved.");
+            }
+          });
+        }
+      });
+    }
+  }
+}
+
 function getWebviewContent(code: String = "") {
   let extensionPath = vscode.Uri.file(vscode.extensions.getExtension("garrit.p5canvas").extensionPath).with({
-    scheme: "vscode-resource"
+    scheme: "vscode-resource",
   });
 
   let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep).with({
-    scheme: "vscode-resource"
+    scheme: "vscode-resource",
   });
 
   return `
@@ -137,8 +182,8 @@ function getWebviewContent(code: String = "") {
   <html>
     <head>
       <script src="${extensionPath}/assets/p5.min.js"></script>
-      <script src="${extensionPath}/assets/websocketlog.js">
-      </script><script>setupWebsocket("${server}");</script>
+      <script src="${extensionPath}/assets/communication.js"></script>
+      <script>setupCommunication();</script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
       <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/ruler.js"></script>
@@ -208,7 +253,5 @@ function getWebviewContent(code: String = "") {
 }
 
 export function deactivate() {
-  websocket.dispose();
-  websocket = null;
   return undefined;
 }
