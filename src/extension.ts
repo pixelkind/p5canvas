@@ -175,20 +175,32 @@ function handleMessage(message) {
   }
 }
 
-function getImports(localPath: vscode.Uri, code: String = "") {
+function resolveImport(line: String) {
+  if (line.indexOf("import ") != 0) {
+    return "";
+  }
+  let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep);
+  let elements = line.split(" ");
+  let importPath = elements[elements.length - 1];
+  importPath = importPath.slice(1, importPath.length - 2);
+  let filePath = path.resolve(localPath.fsPath, importPath);
+  if (filePath.indexOf(".js") === -1) {
+    filePath += ".js";
+  }
+  let file = fs.readFileSync(filePath, "utf8");
+  file = file.replace("export default ", "");
+  file = file.replace("export ", "");
+  file = resolveFile(file);
+  return file;
+}
+
+function resolveFile(code) {
   let lines = code.split(os.EOL);
   let newLines = [];
   let importedCode = [];
-  lines.forEach((line) => {
+  lines.forEach((line: String) => {
     if (line.indexOf("import ") === 0) {
-      let elements = line.split(" ");
-      let importPath = elements[elements.length - 1];
-      importPath = importPath.slice(1, importPath.length - 2);
-      let filePath = path.resolve(localPath.fsPath, importPath);
-      let file = fs.readFileSync(filePath, "utf8");
-      file = file.replace("export default ", "");
-      file = file.replace("export ", "");
-      importedCode.push(file);
+      importedCode.push(resolveImport(line));
     } else {
       newLines.push(line);
     }
@@ -206,7 +218,7 @@ function getWebviewContent(code: String = "") {
     scheme: "vscode-resource",
   });
 
-  code = getImports(vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep), code);
+  code = resolveFile(code);
 
   return `
   <!DOCTYPE html>
