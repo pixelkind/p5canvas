@@ -2,6 +2,10 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.5.1
+
+- Bugfix: Canvas not showing on first open
+
 ## 1.5.0
 
 - Changed communication from websockets to the internal messaging api

@@ -25,6 +25,10 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.5.1
+
+- Bugfix: Canvas not showing on first open
+
 ### 1.5.0
 
 - Changed communication from websockets to the internal messaging api

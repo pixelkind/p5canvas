@@ -11,6 +11,7 @@ let currentPanel: vscode.WebviewPanel | undefined = undefined;
 let lastCodeHash: String = undefined;
 
 export function activate(context: vscode.ExtensionContext) {
+  lastCodeHash = undefined;
   let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
   statusBarItem.text = `$(file-media) p5canvas`;
   statusBarItem.command = "extension.showCanvas";
@@ -56,16 +57,22 @@ export function activate(context: vscode.ExtensionContext) {
     if (currentPanel) {
       currentPanel.reveal(vscode.ViewColumn.Two);
     } else {
+      let editor = vscode.window.activeTextEditor;
+      if (editor) {
+        lastKnownEditor = editor;
+      }
       currentPanel = vscode.window.createWebviewPanel("p5canvas", "p5canvas", vscode.ViewColumn.Two, {
         enableScripts: true,
         localResourceRoots: [extensionPath, localPath],
       });
+      lastCodeHash = undefined;
       currentPanel.webview.onDidReceiveMessage(handleMessage);
       currentPanel.webview.html = getWebviewContent();
       updateCode(lastKnownEditor, outputChannel);
 
       currentPanel.onDidDispose(
         () => {
+          lastCodeHash = undefined;
           currentPanel = undefined;
         },
         undefined,
