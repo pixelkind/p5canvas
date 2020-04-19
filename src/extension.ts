@@ -190,7 +190,6 @@ function getWebviewContent(code: String = "") {
     <head>
       <script src="${extensionPath}/assets/p5.min.js"></script>
       <script src="${extensionPath}/assets/communication.js"></script>
-      <script>setupCommunication();</script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
       <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/ruler.js"></script>
