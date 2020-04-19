@@ -17,6 +17,8 @@ function setupCommunication() {
   });
 }
 
+window.addEventListener("load", setupCommunication);
+
 function addLog(msg, type) {
   if (typeof msg === "object") {
     msg = JSON.stringify(msg, null, 4);

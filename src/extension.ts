@@ -219,7 +219,7 @@ function getWebviewContent(code: String = "") {
       }
     </style>
     </head>
-    <body onload="setupRulers();" onmousemove="updateRulers(event);">
+    <body>
       <canvas id="ruler-vertical"></canvas>
       <div class="flex-col no-padding-no-margin">
         <canvas id="ruler-horizontal"></canvas>
