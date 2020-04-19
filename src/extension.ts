@@ -175,9 +175,9 @@ function handleMessage(message) {
   }
 }
 
-function resolveImport(line: String) {
+function resolveImport(line: String, imports: Array<string>) {
   if (line.indexOf("import ") != 0) {
-    return "";
+    return undefined;
   }
   let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep);
   let elements = line.split(" ");
@@ -187,26 +187,34 @@ function resolveImport(line: String) {
   if (filePath.indexOf(".js") === -1) {
     filePath += ".js";
   }
+  if (imports.indexOf(filePath) != -1) {
+    return undefined;
+  }
+  imports.push(filePath);
   let file = fs.readFileSync(filePath, "utf8");
   file = file.replace("export default ", "");
   file = file.replace("export ", "");
-  file = resolveFile(file);
-  return file;
+  let resolvedFile = resolveFile(file, imports);
+  return {code: resolvedFile.code, imports: resolvedFile.imports};
 }
 
-function resolveFile(code) {
+function resolveFile(code: String, imports: Array<string> = []) {
   let lines = code.split(os.EOL);
   let newLines = [];
   let importedCode = [];
   lines.forEach((line: String) => {
     if (line.indexOf("import ") === 0) {
-      importedCode.push(resolveImport(line));
+      let resolvedImport = resolveImport(line, imports);
+      if (resolvedImport != undefined) {
+        importedCode.push(resolvedImport.code);
+        imports = resolvedImport.imports;
+      }
     } else {
       newLines.push(line);
     }
   });
   newLines = importedCode.concat(newLines);
-  return newLines.join(os.EOL);
+  return {code: newLines.join(os.EOL), imports: imports};
 }
 
 function getWebviewContent(code: String = "") {
@@ -218,7 +226,7 @@ function getWebviewContent(code: String = "") {
     scheme: "vscode-resource",
   });
 
-  code = resolveFile(code);
+  code = resolveFile(code).code;
 
   return `
   <!DOCTYPE html>
