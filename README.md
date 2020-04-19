@@ -25,6 +25,10 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.5.0
+
+- Changed communication from websockets to the internal messaging api
+
 ### 1.4.1
 
 - Bugfix for a problem with events
@@ -35,10 +39,6 @@ There are currently no known issues. If you find any issues, please feel free, t
 - Enable all log levels
 - Some improvements for ES 6 usage
 - Cleaned up codebase
-
-### 1.3.0
-
-- Making JavaScript ES 6 the default
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 
