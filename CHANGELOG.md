@@ -2,6 +2,10 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.6.0
+
+- Beta Support for `import` Statements
+
 ## 1.5.1
 
 - Bugfix: Canvas not showing on first open

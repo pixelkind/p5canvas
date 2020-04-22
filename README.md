@@ -14,6 +14,7 @@ There is a standard setup script included which setups a full width/height canva
 - Loading images with relative path
 - Saving the current canvas as PNG (as a command)
 - Fully ES 6 compatible
+- Support for `import` Statements in Beta
 
 ## Usage
 
@@ -24,6 +25,10 @@ If a JavaScript file is open, a p5canvas button appears in the status bar bottom
 There are currently no known issues. If you find any issues, please feel free, to message me on [Twitter](https://twitter.com/pixelkind) or [Github](https://github.com/pixelkind/p5canvas).
 
 ## Release Notes
+
+### 1.6.0
+
+- Beta Support for `import` Statements
 
 ### 1.5.1
 
@@ -36,13 +41,6 @@ There are currently no known issues. If you find any issues, please feel free, t
 ### 1.4.1
 
 - Bugfix for a problem with events
-
-### 1.4.0
-
-- Always reloads the full canvas
-- Enable all log levels
-- Some improvements for ES 6 usage
-- Cleaned up codebase
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 

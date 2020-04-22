@@ -1,10 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
-import * as os from "os";
 
 export function resolveImports(code: String, imports: Array<string> = []) {
-  let lines = code.split(os.EOL);
+  let lines = code.split("\n");
   let newLines = [];
   let importedCode = [];
 
@@ -18,7 +17,7 @@ export function resolveImports(code: String, imports: Array<string> = []) {
   });
 
   newLines = importedCode.concat(newLines);
-  return newLines.join(os.EOL);
+  return newLines.join("\n");
 }
 
 function resolveSingleImport(line: String, imports: Array<string>) {
