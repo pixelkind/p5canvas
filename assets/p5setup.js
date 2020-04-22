@@ -15,10 +15,11 @@ function setup() {
   clear();
 }
 
-function windowResized() {
+function resizeCanvas() {
   resizeCanvas(windowWidth - p5rulersize, windowHeight - p5rulersize);
   clear();
 }
+window.addEventListener("resize", resizeCanvas);
 
 function p5reset() {
   clear();

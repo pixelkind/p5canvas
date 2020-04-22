@@ -2,7 +2,7 @@
   "name": "p5canvas",
   "displayName": "p5canvas",
   "description": "Live preview for p5js coding",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "publisher": "garrit",
   "engines": {
     "vscode": "^1.32.0"
@@ -10,6 +10,13 @@
   "icon": "images/p5canvas-icon.png",
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "p5",
+    "p5canvas",
+    "auto-reload",
+    "creative coding",
+    "live coding"
   ],
   "activationEvents": [
     "onLanguage:javascript"
@@ -24,7 +31,6 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
     "compile": "tsc -watch -p ./"
   },
   "devDependencies": {

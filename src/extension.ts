@@ -5,6 +5,7 @@ import {JSHINT} from "jshint";
 import * as path from "path";
 import * as fs from "fs";
 import * as crypto from "crypto";
+import {resolveImports} from "./ImportSolver";
 
 let outputChannel: vscode.OutputChannel;
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
@@ -63,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
       currentPanel = vscode.window.createWebviewPanel("p5canvas", "p5canvas", vscode.ViewColumn.Two, {
         enableScripts: true,
-        localResourceRoots: [extensionPath, localPath],
+        localResourceRoots: [extensionPath, localPath], // Maybe we can remove that
       });
       lastCodeHash = undefined;
       currentPanel.webview.onDidReceiveMessage(handleMessage);
@@ -99,8 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function updateCode(editor: vscode.TextEditor, outputChannel: vscode.OutputChannel) {
-  if (!editor) {
-    console.log("Error: No document found");
+  if (!editor || !currentPanel) {
     return;
   }
   let text = editor.document.getText();
@@ -121,7 +121,7 @@ function updateCode(editor: vscode.TextEditor, outputChannel: vscode.OutputChann
     let message = "🙊 Errors:\n";
 
     let es6error = false;
-    JSHINT.errors.forEach((element) => {
+    JSHINT.errors.forEach((element: any) => {
       message += `Line ${element.line}, col ${element.character}: ${element.reason}\n`;
     });
     outputChannel.clear();
@@ -129,7 +129,7 @@ function updateCode(editor: vscode.TextEditor, outputChannel: vscode.OutputChann
   }
 }
 
-function handleMessage(message) {
+function handleMessage(message: any) {
   if (message.type == "log") {
     switch (message.logType) {
       case "warn":
@@ -184,13 +184,14 @@ function getWebviewContent(code: String = "") {
     scheme: "vscode-resource",
   });
 
+  code = resolveImports(code);
+
   return `
   <!DOCTYPE html>
   <html>
     <head>
       <script src="${extensionPath}/assets/p5.min.js"></script>
       <script src="${extensionPath}/assets/communication.js"></script>
-      <script>setupCommunication();</script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
       <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/ruler.js"></script>
@@ -226,7 +227,7 @@ function getWebviewContent(code: String = "") {
       }
     </style>
     </head>
-    <body onload="setupRulers();" onmousemove="updateRulers(event);">
+    <body>
       <canvas id="ruler-vertical"></canvas>
       <div class="flex-col no-padding-no-margin">
         <canvas id="ruler-horizontal"></canvas>
