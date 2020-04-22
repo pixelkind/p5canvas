@@ -121,7 +121,7 @@ function updateCode(editor: vscode.TextEditor, outputChannel: vscode.OutputChann
     let message = "🙊 Errors:\n";
 
     let es6error = false;
-    JSHINT.errors.forEach((element) => {
+    JSHINT.errors.forEach((element: any) => {
       message += `Line ${element.line}, col ${element.character}: ${element.reason}\n`;
     });
     outputChannel.clear();
@@ -129,7 +129,7 @@ function updateCode(editor: vscode.TextEditor, outputChannel: vscode.OutputChann
   }
 }
 
-function handleMessage(message) {
+function handleMessage(message: any) {
   if (message.type == "log") {
     switch (message.logType) {
       case "warn":
