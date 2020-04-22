@@ -5,7 +5,7 @@ import {JSHINT} from "jshint";
 import * as path from "path";
 import * as fs from "fs";
 import * as crypto from "crypto";
-import * as os from "os";
+import {resolveImports} from "./ImportSolver";
 
 let outputChannel: vscode.OutputChannel;
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
@@ -175,48 +175,6 @@ function handleMessage(message) {
   }
 }
 
-function resolveImport(line: String, imports: Array<string>) {
-  if (line.indexOf("import ") != 0) {
-    return undefined;
-  }
-  let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep);
-  let elements = line.split(" ");
-  let importPath = elements[elements.length - 1];
-  importPath = importPath.slice(1, importPath.length - 2);
-  let filePath = path.resolve(localPath.fsPath, importPath);
-  if (filePath.indexOf(".js") === -1) {
-    filePath += ".js";
-  }
-  if (imports.indexOf(filePath) != -1) {
-    return undefined;
-  }
-  imports.push(filePath);
-  let file = fs.readFileSync(filePath, "utf8");
-  file = file.replace("export default ", "");
-  file = file.replace("export ", "");
-  let resolvedFile = resolveFile(file, imports);
-  return {code: resolvedFile.code, imports: resolvedFile.imports};
-}
-
-function resolveFile(code: String, imports: Array<string> = []) {
-  let lines = code.split(os.EOL);
-  let newLines = [];
-  let importedCode = [];
-  lines.forEach((line: String) => {
-    if (line.indexOf("import ") === 0) {
-      let resolvedImport = resolveImport(line, imports);
-      if (resolvedImport != undefined) {
-        importedCode.push(resolvedImport.code);
-        imports = resolvedImport.imports;
-      }
-    } else {
-      newLines.push(line);
-    }
-  });
-  newLines = importedCode.concat(newLines);
-  return {code: newLines.join(os.EOL), imports: imports};
-}
-
 function getWebviewContent(code: String = "") {
   let extensionPath = vscode.Uri.file(vscode.extensions.getExtension("garrit.p5canvas").extensionPath).with({
     scheme: "vscode-resource",
@@ -226,7 +184,7 @@ function getWebviewContent(code: String = "") {
     scheme: "vscode-resource",
   });
 
-  code = resolveFile(code).code;
+  code = resolveImports(code);
 
   return `
   <!DOCTYPE html>
