@@ -15,6 +15,15 @@ function setupCommunication() {
       });
     }
   });
+
+  window.addEventListener("error", (error) => {
+    vscode.postMessage({
+      type: "jsError",
+      containedMessage: error.message,
+      containedRawLine: error.lineno,
+      containedRawColumn: error.colno
+    });
+  });
 }
 
 window.addEventListener("load", setupCommunication);
