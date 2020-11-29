@@ -7,6 +7,12 @@ import * as fs from "fs";
 import * as crypto from "crypto";
 import {resolveImports} from "./ImportSolver";
 
+/**
+ * This is used to correct the linu numbers we output on errors.
+ * This must be kept in sync with the script tag in `getWebviewContent()`
+ */
+const PRECEDING_LINES_IN_SCRIPT_TAG = 6;
+
 let outputChannel: vscode.OutputChannel;
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
 let lastCodeHash: String = undefined;
@@ -172,6 +178,10 @@ function handleMessage(message: any) {
         }
       });
     }
+  } else if (message.type == "jsError") {
+    outputChannel.appendLine(`🦷: ${message.containedMessage} in Line ${message.containedRawLine - PRECEDING_LINES_IN_SCRIPT_TAG} / Column ${message.containedRawColumn}`);
+  } else {
+    outputChannel.appendLine(`unknown message of type "${message.type}" received`);
   }
 }
 
