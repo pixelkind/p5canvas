@@ -26,6 +26,12 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.6.1
+
+- Showing internal JavaScript errors in the output (thanks to @ccoenen)
+- Added mouse position on top ruler
+- Bugfix for cannot read property document of undefined
+
 ### 1.6.0
 
 - Beta Support for `import` Statements
@@ -37,10 +43,6 @@ There are currently no known issues. If you find any issues, please feel free, t
 ### 1.5.0
 
 - Changed communication from websockets to the internal messaging api
-
-### 1.4.1
-
-- Bugfix for a problem with events
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 

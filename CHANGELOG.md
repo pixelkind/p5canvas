@@ -2,6 +2,12 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.6.1
+
+- Showing internal JavaScript errors in the output (thanks to @ccoenen)
+- Added mouse position on top ruler
+- Bugfix for cannot read property document of undefined
+
 ## 1.6.0
 
 - Beta Support for `import` Statements
