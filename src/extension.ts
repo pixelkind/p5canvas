@@ -56,9 +56,6 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  let extensionPath = vscode.Uri.file(vscode.extensions.getExtension("garrit.p5canvas").extensionPath);
-  let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path));
-
   let disposable = vscode.commands.registerCommand("extension.showCanvas", () => {
     outputChannel.show(true);
     if (currentPanel) {
@@ -68,6 +65,8 @@ export function activate(context: vscode.ExtensionContext) {
       if (editor) {
         lastKnownEditor = editor;
       }
+      let extensionPath = vscode.Uri.file(vscode.extensions.getExtension("garrit.p5canvas").extensionPath);
+      let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path));
       currentPanel = vscode.window.createWebviewPanel("p5canvas", "p5canvas", vscode.ViewColumn.Two, {
         enableScripts: true,
         localResourceRoots: [extensionPath, localPath], // Maybe we can remove that
@@ -179,20 +178,26 @@ function handleMessage(message: any) {
       });
     }
   } else if (message.type == "jsError") {
-    outputChannel.appendLine(`🦷: ${message.containedMessage} in Line ${message.containedRawLine - PRECEDING_LINES_IN_SCRIPT_TAG} / Column ${message.containedRawColumn}`);
+    outputChannel.appendLine(
+      `🦷: ${message.containedMessage} in Line ${message.containedRawLine - PRECEDING_LINES_IN_SCRIPT_TAG} / Column ${
+        message.containedRawColumn
+      }`
+    );
   } else {
     outputChannel.appendLine(`unknown message of type "${message.type}" received`);
   }
 }
 
 function getWebviewContent(code: String = "") {
-  let extensionPath = vscode.Uri.file(vscode.extensions.getExtension("garrit.p5canvas").extensionPath).with({
-    scheme: "vscode-resource",
-  });
-
-  let localPath = vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep).with({
-    scheme: "vscode-resource",
-  });
+  if (!currentPanel && !vscode.window.activeTextEditor) {
+    return;
+  }
+  let extensionPath = currentPanel.webview.asWebviewUri(
+    vscode.Uri.file(vscode.extensions.getExtension("garrit.p5canvas").extensionPath)
+  );
+  let localPath = currentPanel.webview.asWebviewUri(
+    vscode.Uri.file(path.dirname(vscode.window.activeTextEditor.document.uri.path) + path.sep)
+  );
 
   code = resolveImports(code);
 

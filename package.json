@@ -5,7 +5,7 @@
   "version": "1.6.0",
   "publisher": "garrit",
   "engines": {
-    "vscode": "^1.32.0"
+    "vscode": "^1.41.0"
   },
   "icon": "images/p5canvas-icon.png",
   "categories": [
@@ -36,9 +36,9 @@
   "devDependencies": {
     "@types/mocha": "^7.0.2",
     "@types/node": "^12.19.7",
-    "@types/vscode": "1.32.0",
+    "@types/vscode": "1.41.0",
     "mocha": "^7.2.0",
-    "typescript": "^2.9.2"
+    "typescript": "^4.1.2"
   },
   "dependencies": {
     "jshint": "^2.12.0"
