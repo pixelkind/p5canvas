@@ -60,7 +60,7 @@ function drawHorizontalRuler() {
   }
 
   ctx.fillStyle = "#333333";
-  ctx.font = "9px sans-serif";
+  ctx.font = "11px monospace";
   ctx.textBaseline = "top";
 
   for (var x = 0; x < hRulerCanvas.width; x += 100) {
@@ -103,7 +103,7 @@ function drawVerticalRuler() {
   }
 
   ctx.fillStyle = "#333333";
-  ctx.font = "9px sans-serif";
+  ctx.font = "11px monospace";
   ctx.textBaseline = "top";
 
   for (var y = p5rulersize; y < vRulerCanvas.height; y += 100) {
@@ -120,6 +120,26 @@ function drawVerticalRuler() {
       ctx.restore();
     }
   }
+}
+
+function showMousePosition(x, y) {
+  var ctx = hRulerContext;
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+  ctx.fillRect(0, 0, 80, hRulerCanvas.height);
+
+  ctx.fillStyle = "#FFFFFF";
+  ctx.font = "13px monospace";
+  ctx.textBaseline = "bottom";
+
+  ctx.textAlign = "right";
+  ctx.fillText(x.toFixed(0), 35, hRulerCanvas.height - 4);
+
+  ctx.textAlign = "center";
+  ctx.fillText("/", 40, hRulerCanvas.height - 4);
+
+  ctx.textAlign = "left";
+  ctx.fillText(y.toFixed(0), 45, hRulerCanvas.height - 4);
 }
 
 function updateRulers(event) {
@@ -140,5 +160,7 @@ function updateRulers(event) {
   vRulerContext.moveTo(0, event.pageY - 0.5);
   vRulerContext.lineTo(p5rulersize, event.pageY - 0.5);
   vRulerContext.stroke();
+
+  showMousePosition(event.pageX - p5rulersize, event.pageY - p5rulersize);
 }
 window.addEventListener("mousemove", updateRulers);
