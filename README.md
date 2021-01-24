@@ -16,6 +16,10 @@ There is a standard setup script included which setups a full width/height canva
 - Fully ES 6 compatible
 - Support for `import` Statements in Beta
 
+## Setup
+
+This can be installed from within VS Code's "Extensions" menu by searching for `p5canvas`. You can also run `ext install garrit.p5canvas` from your terminal, or go to [the visual Studio Marketplace page of p5canvas](https://marketplace.visualstudio.com/items?itemName=garrit.p5canvas) to download the vsix file and manually install it. This last method also works in VS Codium.
+
 ## Usage
 
 If a JavaScript file is open, a p5canvas button appears in the status bar bottom left. Click on it, to open the preview.
