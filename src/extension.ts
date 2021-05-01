@@ -211,36 +211,7 @@ function getWebviewContent(code: String = "") {
       <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/ruler.js"></script>
       <script>var p5rulersize = 20</script>
-      <style>
-      html {
-          height: 100%;
-      }
-      body {
-          height: 100%;
-          display: flex;
-          flex-direction: row;
-          padding: 0;
-          margin: 0;
-      }
-      .no-padding-no-margin {
-          padding: 0;
-          margin: 0;
-      }
-      .flex-col {
-          flex-direction: column;
-      }
-      #ruler-horizontal {
-          width: 100%;
-          height: 20px;
-      }
-      #ruler-vertical {
-          width: 20px;
-          height: 100%;
-      }
-      canvas {
-          display: block;
-      }
-    </style>
+      <link rel="stylesheet" href="${extensionPath}/assets/p5canvas.css" />
     </head>
     <body>
       <canvas id="ruler-vertical"></canvas>
