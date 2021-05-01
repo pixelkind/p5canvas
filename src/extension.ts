@@ -1,14 +1,14 @@
 "use strict";
 
 import * as vscode from "vscode";
-import {JSHINT} from "jshint";
+import { JSHINT } from "jshint";
 import * as path from "path";
 import * as fs from "fs";
 import * as crypto from "crypto";
-import {resolveImports} from "./ImportSolver";
+import { resolveImports } from "./ImportSolver";
 
 /**
- * This is used to correct the linu numbers we output on errors.
+ * This is used to correct the line numbers we output on errors.
  * This must be kept in sync with the script tag in `getWebviewContent()`
  */
 const PRECEDING_LINES_IN_SCRIPT_TAG = 6;
