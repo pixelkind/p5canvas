@@ -1,34 +1,62 @@
-function setup() {
+function p5setup() {
   // Override the loadImage method from p5js to enable the usage of relative paths
   // This method must be overriden inside of setup
-  let loadImageSuper = loadImage;
-  loadImage = (path, successCallback, failureCallback) => {
-    if (!path.startsWith("file:") && !path.startsWith("http")) {
-      path = decodeURI(localPath) + path;
+  let loadImageSuper = window.loadImage;
+  window.loadImage = (path, successCallback, failureCallback) => {
+    if (!path.startsWith("vscode-webview-resource:") && !path.startsWith("http")) {
+      path = decodeURI(window.localPath) + path;
     }
     return loadImageSuper.apply(this, [path, successCallback, failureCallback]);
   };
 
-  var p5canvas = createCanvas(windowWidth - p5rulersize, windowHeight - p5rulersize);
-  p5canvas.parent("p5canvas");
+  window._enableResize = true;
+  let createCanvasSuper = window.createCanvas;
+  window.createCanvas = (w, h, renderer) => {
+    document.getElementById("p5canvas").innerHTML = "";
+    if (w !== undefined && h !== undefined) {
+      window._enableResize = false;
+    }
+    if (w === undefined) {
+      w = innerWidth - p5rulersize;
+    }
+    if (h === undefined) {
+      h = innerHeight - p5rulersize;
+    }
+    let p5canvas = createCanvasSuper(w, h, renderer);
+    p5canvas.parent("p5canvas");
+    return p5canvas;
+  };
+
+  createCanvas();
   frameRate(30);
   clear();
+
+  runCode();
+  if (window._customPreload !== undefined) {
+    window._customPreload();
+  }
+  if (window._customSetup !== undefined) {
+    window._customSetup();
+  }
 }
 
-function resizeCanvas() {
-  resizeCanvas(windowWidth - p5rulersize, windowHeight - p5rulersize);
-  clear();
+function resizeCanvasHandler() {
+  if (window._enableResize) {
+    resizeCanvas(innerWidth - p5rulersize, innerHeight - p5rulersize);
+    if (p5 !== undefined) {
+      clear();
+    }
+  }
 }
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize", resizeCanvasHandler);
 
-function p5reset() {
-  clear();
-  fill(255, 255, 255);
-  stroke(0, 0, 0);
-  strokeWeight(1);
-  textSize(12);
+let width = window.innerWidth;
+let height = window.innerHeight;
+
+function loadHandler() {
+  window.setup = p5setup;
+
+  new p5();
 }
 
-new p5();
-var width = windowWidth;
-var height = windowHeight;
+window.addEventListener("load", loadHandler);

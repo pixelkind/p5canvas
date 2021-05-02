@@ -1,14 +1,14 @@
 "use strict";
 
 import * as vscode from "vscode";
-import {JSHINT} from "jshint";
+import { JSHINT } from "jshint";
 import * as path from "path";
 import * as fs from "fs";
 import * as crypto from "crypto";
-import {resolveImports} from "./ImportSolver";
+import { resolveImports } from "./ImportSolver";
 
 /**
- * This is used to correct the linu numbers we output on errors.
+ * This is used to correct the line numbers we output on errors.
  * This must be kept in sync with the script tag in `getWebviewContent()`
  */
 const PRECEDING_LINES_IN_SCRIPT_TAG = 6;
@@ -205,42 +205,13 @@ function getWebviewContent(code: String = "") {
   <!DOCTYPE html>
   <html>
     <head>
+      <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/p5.min.js"></script>
       <script src="${extensionPath}/assets/communication.js"></script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
-      <script>window.localPath = "${localPath}";</script>
-      <script src="${extensionPath}/assets/ruler.js"></script>
       <script>var p5rulersize = 20</script>
-      <style>
-      html {
-          height: 100%;
-      }
-      body {
-          height: 100%;
-          display: flex;
-          flex-direction: row;
-          padding: 0;
-          margin: 0;
-      }
-      .no-padding-no-margin {
-          padding: 0;
-          margin: 0;
-      }
-      .flex-col {
-          flex-direction: column;
-      }
-      #ruler-horizontal {
-          width: 100%;
-          height: 20px;
-      }
-      #ruler-vertical {
-          width: 20px;
-          height: 100%;
-      }
-      canvas {
-          display: block;
-      }
-    </style>
+      <script src="${extensionPath}/assets/ruler.js"></script>
+      <link rel="stylesheet" href="${extensionPath}/assets/p5canvas.css" />
     </head>
     <body>
       <canvas id="ruler-vertical"></canvas>
@@ -248,28 +219,32 @@ function getWebviewContent(code: String = "") {
         <canvas id="ruler-horizontal"></canvas>
         <div id="p5canvas"></div>
       </div>
-      <script id="code">setTimeout(() => {
-        var draw;
-        var keyPressed, keyReleased, keyTyped;
-        var mousePressed, mouseReleased, mouseClicked, doubleClicked;
-        var mouseDragged, mouseMoved, mouseWheel;
-        var touchesStarted, touchesMoved, touchesEnded;
-        ${code}
-        window.draw = draw;
-        window.keyPressed = keyPressed;
-        window.keyReleased = keyReleased;
-        window.keyTyped = keyTyped;
-        window.mousePressed = mousePressed;
-        window.mouseReleased = mouseReleased;
-        window.mouseClicked = mouseClicked;
-        window.doubleClicked = doubleClicked;
-        window.mouseDragged = mouseDragged;
-        window.mouseMoved = mouseMoved;
-        window.mouseWheel = mouseWheel;
-        window.touchesStarted = touchesStarted;
-        window.touchesMoved = touchesMoved;
-        window.touchesEnded = touchesEnded;
-      }, 1);</script>
+      <script id="code">
+        function runCode() {
+          var draw, preload, setup;
+          var keyPressed, keyReleased, keyTyped;
+          var mousePressed, mouseReleased, mouseClicked, doubleClicked;
+          var mouseDragged, mouseMoved, mouseWheel;
+          var touchesStarted, touchesMoved, touchesEnded;
+          ${code}
+          window._customPreload = preload;
+          window._customSetup = setup;
+          window.draw = draw;
+          window.keyPressed = keyPressed;
+          window.keyReleased = keyReleased;
+          window.keyTyped = keyTyped;
+          window.mousePressed = mousePressed;
+          window.mouseReleased = mouseReleased;
+          window.mouseClicked = mouseClicked;
+          window.doubleClicked = doubleClicked;
+          window.mouseDragged = mouseDragged;
+          window.mouseMoved = mouseMoved;
+          window.mouseWheel = mouseWheel;
+          window.touchesStarted = touchesStarted;
+          window.touchesMoved = touchesMoved;
+          window.touchesEnded = touchesEnded;
+        }
+      </script>
     </body>
   </html>
   `;

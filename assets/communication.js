@@ -21,7 +21,7 @@ function setupCommunication() {
       type: "jsError",
       containedMessage: error.message,
       containedRawLine: error.lineno,
-      containedRawColumn: error.colno
+      containedRawColumn: error.colno,
     });
   });
 }
