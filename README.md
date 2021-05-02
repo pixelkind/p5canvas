@@ -5,7 +5,7 @@ The p5canvas extensions allows you to preview your p5js code in a canvas side by
 ![Example Screenshot](images/example_01.png)
 Image by Quynh Han Tran
 
-There is a standard setup script included which setups a full width/height canvas that will be resized automatically. In one of the next versions this will become optional.
+There is a standard setup script included which setups a full width/height canvas that will be resized automatically, but you can override that with your script.
 
 ## Features
 
@@ -18,7 +18,7 @@ There is a standard setup script included which setups a full width/height canva
 
 ## Setup
 
-This can be installed from within VS Code's "Extensions" menu by searching for `p5canvas`. You can also run `ext install garrit.p5canvas` from your terminal, or go to [the visual Studio Marketplace page of p5canvas](https://marketplace.visualstudio.com/items?itemName=garrit.p5canvas) to download the vsix file and manually install it. This last method also works in VS Codium.
+This can be installed from within VS Code's "Extensions" menu by searching for `p5canvas`. You can also run `ext install garrit.p5canvas` from your terminal, or go to [the visual Studio Marketplace page of p5canvas](https://marketplace.visualstudio.com/items?itemName=garrit.p5canvas) to download the vsix file and manually install it. It is also available as extension in VS Codium.
 
 ## Usage
 
