@@ -9,8 +9,25 @@ function p5setup() {
     return loadImageSuper.apply(this, [path, successCallback, failureCallback]);
   };
 
-  var p5canvas = createCanvas(innerWidth - p5rulersize, innerHeight - p5rulersize);
-  p5canvas.parent("p5canvas");
+  window._enableResize = true;
+  let createCanvasSuper = window.createCanvas;
+  window.createCanvas = (w, h, renderer) => {
+    document.getElementById("p5canvas").innerHTML = "";
+    if (w !== undefined && h !== undefined) {
+      window._enableResize = false;
+    }
+    if (w === undefined) {
+      w = innerWidth - p5rulersize;
+    }
+    if (h === undefined) {
+      h = innerHeight - p5rulersize;
+    }
+    let p5canvas = createCanvasSuper(w, h, renderer);
+    p5canvas.parent("p5canvas");
+    return p5canvas;
+  };
+
+  createCanvas();
   frameRate(30);
   clear();
 
@@ -18,12 +35,17 @@ function p5setup() {
   if (window._customPreload !== undefined) {
     window._customPreload();
   }
+  if (window._customSetup !== undefined) {
+    window._customSetup();
+  }
 }
 
 function resizeCanvasHandler() {
-  resizeCanvas(innerWidth - p5rulersize, innerHeight - p5rulersize);
-  if (p5 !== undefined) {
-    clear();
+  if (window._enableResize) {
+    resizeCanvas(innerWidth - p5rulersize, innerHeight - p5rulersize);
+    if (p5 !== undefined) {
+      clear();
+    }
   }
 }
 window.addEventListener("resize", resizeCanvasHandler);

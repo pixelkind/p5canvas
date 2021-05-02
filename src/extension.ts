@@ -221,13 +221,14 @@ function getWebviewContent(code: String = "") {
       </div>
       <script id="code">
         function runCode() {
-          var draw, preload;
+          var draw, preload, setup;
           var keyPressed, keyReleased, keyTyped;
           var mousePressed, mouseReleased, mouseClicked, doubleClicked;
           var mouseDragged, mouseMoved, mouseWheel;
           var touchesStarted, touchesMoved, touchesEnded;
           ${code}
           window._customPreload = preload;
+          window._customSetup = setup;
           window.draw = draw;
           window.keyPressed = keyPressed;
           window.keyReleased = keyReleased;

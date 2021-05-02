@@ -2,6 +2,13 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.7.0
+
+- Update to the latest version of p5js
+- Adding support for `preload` function
+- Adding support for `setup` function
+- Adding support to use `createCanvas` to create a fixed size or a `WEBGL` canvas
+
 ## 1.6.1
 
 - Showing internal JavaScript errors in the output (thanks to @ccoenen)

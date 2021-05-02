@@ -30,6 +30,13 @@ There are currently no known issues. If you find any issues, please feel free, t
 
 ## Release Notes
 
+### 1.7.0
+
+- Update to the latest version of p5js
+- Adding support for `preload` function
+- Adding support for `setup` function
+- Adding support to use `createCanvas` to create a fixed size or a `WEBGL` canvas
+
 ### 1.6.1
 
 - Showing internal JavaScript errors in the output (thanks to @ccoenen)
