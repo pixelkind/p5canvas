@@ -1,34 +1,40 @@
-function setup() {
+function p5setup() {
   // Override the loadImage method from p5js to enable the usage of relative paths
   // This method must be overriden inside of setup
-  let loadImageSuper = loadImage;
-  loadImage = (path, successCallback, failureCallback) => {
-    if (!path.startsWith("file:") && !path.startsWith("http")) {
-      path = decodeURI(localPath) + path;
+  let loadImageSuper = window.loadImage;
+  window.loadImage = (path, successCallback, failureCallback) => {
+    if (!path.startsWith("vscode-webview-resource:") && !path.startsWith("http")) {
+      path = decodeURI(window.localPath) + path;
     }
     return loadImageSuper.apply(this, [path, successCallback, failureCallback]);
   };
 
-  var p5canvas = createCanvas(windowWidth - p5rulersize, windowHeight - p5rulersize);
+  var p5canvas = createCanvas(innerWidth - p5rulersize, innerHeight - p5rulersize);
   p5canvas.parent("p5canvas");
   frameRate(30);
   clear();
+
+  runCode();
+  if (window._customPreload !== undefined) {
+    window._customPreload();
+  }
 }
 
-function resizeCanvas() {
-  resizeCanvas(windowWidth - p5rulersize, windowHeight - p5rulersize);
-  clear();
+function resizeCanvasHandler() {
+  resizeCanvas(innerWidth - p5rulersize, innerHeight - p5rulersize);
+  if (p5 !== undefined) {
+    clear();
+  }
 }
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize", resizeCanvasHandler);
 
-function p5reset() {
-  clear();
-  fill(255, 255, 255);
-  stroke(0, 0, 0);
-  strokeWeight(1);
-  textSize(12);
+let width = window.innerWidth;
+let height = window.innerHeight;
+
+function loadHandler() {
+  window.setup = p5setup;
+
+  new p5();
 }
 
-new p5();
-var width = windowWidth;
-var height = windowHeight;
+window.addEventListener("load", loadHandler);

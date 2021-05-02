@@ -205,12 +205,12 @@ function getWebviewContent(code: String = "") {
   <!DOCTYPE html>
   <html>
     <head>
+      <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/p5.min.js"></script>
       <script src="${extensionPath}/assets/communication.js"></script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
-      <script>window.localPath = "${localPath}";</script>
-      <script src="${extensionPath}/assets/ruler.js"></script>
       <script>var p5rulersize = 20</script>
+      <script src="${extensionPath}/assets/ruler.js"></script>
       <link rel="stylesheet" href="${extensionPath}/assets/p5canvas.css" />
     </head>
     <body>
@@ -219,28 +219,31 @@ function getWebviewContent(code: String = "") {
         <canvas id="ruler-horizontal"></canvas>
         <div id="p5canvas"></div>
       </div>
-      <script id="code">setTimeout(() => {
-        var draw;
-        var keyPressed, keyReleased, keyTyped;
-        var mousePressed, mouseReleased, mouseClicked, doubleClicked;
-        var mouseDragged, mouseMoved, mouseWheel;
-        var touchesStarted, touchesMoved, touchesEnded;
-        ${code}
-        window.draw = draw;
-        window.keyPressed = keyPressed;
-        window.keyReleased = keyReleased;
-        window.keyTyped = keyTyped;
-        window.mousePressed = mousePressed;
-        window.mouseReleased = mouseReleased;
-        window.mouseClicked = mouseClicked;
-        window.doubleClicked = doubleClicked;
-        window.mouseDragged = mouseDragged;
-        window.mouseMoved = mouseMoved;
-        window.mouseWheel = mouseWheel;
-        window.touchesStarted = touchesStarted;
-        window.touchesMoved = touchesMoved;
-        window.touchesEnded = touchesEnded;
-      }, 1);</script>
+      <script id="code">
+        function runCode() {
+          var draw, preload;
+          var keyPressed, keyReleased, keyTyped;
+          var mousePressed, mouseReleased, mouseClicked, doubleClicked;
+          var mouseDragged, mouseMoved, mouseWheel;
+          var touchesStarted, touchesMoved, touchesEnded;
+          ${code}
+          window._customPreload = preload;
+          window.draw = draw;
+          window.keyPressed = keyPressed;
+          window.keyReleased = keyReleased;
+          window.keyTyped = keyTyped;
+          window.mousePressed = mousePressed;
+          window.mouseReleased = mouseReleased;
+          window.mouseClicked = mouseClicked;
+          window.doubleClicked = doubleClicked;
+          window.mouseDragged = mouseDragged;
+          window.mouseMoved = mouseMoved;
+          window.mouseWheel = mouseWheel;
+          window.touchesStarted = touchesStarted;
+          window.touchesMoved = touchesMoved;
+          window.touchesEnded = touchesEnded;
+        }
+      </script>
     </body>
   </html>
   `;
