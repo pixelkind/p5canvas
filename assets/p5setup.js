@@ -9,6 +9,18 @@ function p5setup() {
     return loadImageSuper.apply(this, [path, successCallback, failureCallback]);
   };
 
+  let loadShaderSuper = window.loadShader;
+  window.loadShader = (vertFilename, fragFilename, callback, errorCallback) => {
+    if (!vertFilename.startsWith("vscode-webview-resource:") && !vertFilename.startsWith("http")) {
+      vertFilename = decodeURI(window.localPath) + vertFilename;
+    }
+    if (!fragFilename.startsWith("vscode-webview-resource:") && !fragFilename.startsWith("http")) {
+      fragFilename = decodeURI(window.localPath) + fragFilename;
+    }
+    // Add preload check to make sure that shaders have been loaded and compiled... otherwise we will still have an error
+    return loadShaderSuper.apply(this, [vertFilename, fragFilename, callback, errorCallback]);
+  };
+
   window._enableResize = true;
   let createCanvasSuper = window.createCanvas;
   window.createCanvas = (w, h, renderer) => {
