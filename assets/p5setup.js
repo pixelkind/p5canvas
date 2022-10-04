@@ -22,15 +22,20 @@ function p5setup() {
     if (h === undefined) {
       h = innerHeight - p5rulersize;
     }
-    let p5canvas = createCanvasSuper(w, h, renderer);
-    p5canvas.parent("p5canvas");
-    return p5canvas;
+    window.p5canvas = createCanvasSuper(w, h, renderer);
+    window.p5canvas.parent("p5canvas");
+    return window.p5canvas;
   };
 
+  let framerate = 30;
+  window.capturer = new CCapture({ format: "webm", framerate, verbose: true });
+  // window.capturer = new CCapture({ format: "gif", workersPath: "js/", framerate, verbose: true });
+
   createCanvas();
-  frameRate(30);
+  frameRate(framerate);
   clear();
 
+  // window.capturer.start();
   runCode();
   if (window._customPreload !== undefined) {
     window._customPreload();
@@ -55,6 +60,14 @@ let height = window.innerHeight;
 
 function loadHandler() {
   window.setup = p5setup;
+  window.download = (data, filename, mimeType) => {
+    console.log(data);
+    vscode.postMessage({
+      type: "imageData",
+      mimeType: "webm",
+      data: data,
+    });
+  };
 
   new p5();
 }

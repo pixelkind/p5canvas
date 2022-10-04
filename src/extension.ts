@@ -176,6 +176,27 @@ function handleMessage(message: any) {
           });
         }
       });
+    } else if (message.mimeType == "webm") {
+      let buffer = Buffer.from(new Uint8Array(message.data));
+      let options = {
+        filters: {
+          WebM: ["webm"],
+        },
+      };
+      console.log(message.data);
+      console.log(buffer.length);
+      vscode.window.showSaveDialog(options).then((result) => {
+        if (result) {
+          let path = result.fsPath;
+          fs.writeFile(path, buffer, (err) => {
+            if (err) {
+              vscode.window.showErrorMessage("Error saving the file: " + err);
+            } else {
+              vscode.window.showInformationMessage("The file has been saved.");
+            }
+          });
+        }
+      });
     }
   } else if (message.type == "jsError") {
     outputChannel.appendLine(
@@ -207,6 +228,7 @@ function getWebviewContent(code: String = "") {
     <head>
       <script>window.localPath = "${localPath}";</script>
       <script src="${extensionPath}/assets/p5.min.js"></script>
+      <script src="${extensionPath}/assets/CCapture.all.min.js"></script>
       <script src="${extensionPath}/assets/communication.js"></script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
       <script>var p5rulersize = 20</script>
