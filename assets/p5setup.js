@@ -3,7 +3,10 @@ function p5setup() {
   // This method must be overriden inside of setup
   let loadImageSuper = window.loadImage;
   window.loadImage = (path, successCallback, failureCallback) => {
-    if (!path.startsWith("vscode-webview-resource:") && !path.startsWith("http")) {
+    if (
+      !path.startsWith("vscode-webview-resource:") &&
+      !path.startsWith("http")
+    ) {
       path = decodeURI(window.localPath) + path;
     }
     return loadImageSuper.apply(this, [path, successCallback, failureCallback]);
@@ -22,6 +25,8 @@ function p5setup() {
     if (h === undefined) {
       h = innerHeight - p5rulersize;
     }
+    width = w;
+    height = h;
     let p5canvas = createCanvasSuper(w, h, renderer);
     p5canvas.parent("p5canvas");
     return p5canvas;
@@ -50,10 +55,12 @@ function resizeCanvasHandler() {
 }
 window.addEventListener("resize", resizeCanvasHandler);
 
-let width = window.innerWidth;
-let height = window.innerHeight;
+let width;
+let height;
 
 function loadHandler() {
+  width = window.innerWidth - p5rulersize;
+  height = window.innerHeight - p5rulersize;
   window.setup = p5setup;
 
   new p5();
