@@ -2,6 +2,10 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.7.1
+
+- Fixing bug with wrong `width` and `height` values
+
 ## 1.7.0
 
 - Update to the latest version of p5js
