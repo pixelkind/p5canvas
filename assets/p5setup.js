@@ -3,7 +3,10 @@ function p5setup() {
   // This method must be overriden inside of setup
   let loadImageSuper = window.loadImage;
   window.loadImage = (path, successCallback, failureCallback) => {
-    if (!path.startsWith("vscode-webview-resource:") && !path.startsWith("http")) {
+    if (
+      !path.startsWith("vscode-webview-resource:") &&
+      !path.startsWith("http")
+    ) {
       path = decodeURI(window.localPath) + path;
     }
     return loadImageSuper.apply(this, [path, successCallback, failureCallback]);
@@ -11,14 +14,25 @@ function p5setup() {
 
   let loadShaderSuper = window.loadShader;
   window.loadShader = (vertFilename, fragFilename, callback, errorCallback) => {
-    if (!vertFilename.startsWith("vscode-webview-resource:") && !vertFilename.startsWith("http")) {
+    _preloadCount++;
+    if (
+      !vertFilename.startsWith("vscode-webview-resource:") &&
+      !vertFilename.startsWith("http")
+    ) {
       vertFilename = decodeURI(window.localPath) + vertFilename;
     }
-    if (!fragFilename.startsWith("vscode-webview-resource:") && !fragFilename.startsWith("http")) {
+    if (
+      !fragFilename.startsWith("vscode-webview-resource:") &&
+      !fragFilename.startsWith("http")
+    ) {
       fragFilename = decodeURI(window.localPath) + fragFilename;
     }
-    // Add preload check to make sure that shaders have been loaded and compiled... otherwise we will still have an error
-    return loadShaderSuper.apply(this, [vertFilename, fragFilename, callback, errorCallback]);
+    return loadShaderSuper.apply(this, [
+      vertFilename,
+      fragFilename,
+      callback,
+      errorCallback,
+    ]);
   };
 
   window._enableResize = true;
@@ -39,16 +53,20 @@ function p5setup() {
     return p5canvas;
   };
 
-  createCanvas();
-  frameRate(30);
-  clear();
-
   runCode();
   if (window._customPreload !== undefined) {
     window._customPreload();
   }
+  callSetup();
+}
+
+function callSetup() {
   if (window._customSetup !== undefined) {
     window._customSetup();
+  } else {
+    createCanvas();
+    frameRate(30);
+    clear();
   }
 }
 
