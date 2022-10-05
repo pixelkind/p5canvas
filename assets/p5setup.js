@@ -1,12 +1,38 @@
-function p5setup() {
+function p5preload() {
   // Override the loadImage method from p5js to enable the usage of relative paths
   // This method must be overriden inside of setup
   let loadImageSuper = window.loadImage;
   window.loadImage = (path, successCallback, failureCallback) => {
-    if (!path.startsWith("vscode-webview-resource:") && !path.startsWith("http")) {
+    if (
+      !path.startsWith("vscode-webview-resource:") &&
+      !path.startsWith("http")
+    ) {
       path = decodeURI(window.localPath) + path;
     }
     return loadImageSuper.apply(this, [path, successCallback, failureCallback]);
+  };
+
+  let loadShaderSuper = window.loadShader;
+  window.loadShader = (vertFilename, fragFilename, callback, errorCallback) => {
+    _preloadCount++;
+    if (
+      !vertFilename.startsWith("vscode-webview-resource:") &&
+      !vertFilename.startsWith("http")
+    ) {
+      vertFilename = decodeURI(window.localPath) + vertFilename;
+    }
+    if (
+      !fragFilename.startsWith("vscode-webview-resource:") &&
+      !fragFilename.startsWith("http")
+    ) {
+      fragFilename = decodeURI(window.localPath) + fragFilename;
+    }
+    return loadShaderSuper.apply(this, [
+      vertFilename,
+      fragFilename,
+      callback,
+      errorCallback,
+    ]);
   };
 
   window._enableResize = true;
@@ -27,17 +53,25 @@ function p5setup() {
     return p5canvas;
   };
 
-  createCanvas();
-  frameRate(30);
-  clear();
-
-  runCode();
   if (window._customPreload !== undefined) {
     window._customPreload();
   }
+  console.log("preload");
+  console.log(window._customPreload);
+}
+
+function p5setup() {
+  console.log("setup");
+  console.log(window._customSetup);
   if (window._customSetup !== undefined) {
     window._customSetup();
+  } else {
+    createCanvas();
+    frameRate(30);
+    clear();
   }
+
+  runCode();
 }
 
 function resizeCanvasHandler() {
@@ -54,6 +88,7 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 
 function loadHandler() {
+  window.preload = p5preload;
   window.setup = p5setup;
 
   new p5();
