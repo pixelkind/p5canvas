@@ -1,4 +1,4 @@
-function p5setup() {
+function p5preload() {
   // Override the loadImage method from p5js to enable the usage of relative paths
   // This method must be overriden inside of setup
   let loadImageSuper = window.loadImage;
@@ -53,14 +53,16 @@ function p5setup() {
     return p5canvas;
   };
 
-  runCode();
   if (window._customPreload !== undefined) {
     window._customPreload();
   }
-  callSetup();
+  console.log("preload");
+  console.log(window._customPreload);
 }
 
-function callSetup() {
+function p5setup() {
+  console.log("setup");
+  console.log(window._customSetup);
   if (window._customSetup !== undefined) {
     window._customSetup();
   } else {
@@ -68,6 +70,8 @@ function callSetup() {
     frameRate(30);
     clear();
   }
+
+  runCode();
 }
 
 function resizeCanvasHandler() {
@@ -84,6 +88,7 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 
 function loadHandler() {
+  window.preload = p5preload;
   window.setup = p5setup;
 
   new p5();
