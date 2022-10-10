@@ -11,7 +11,7 @@ import { resolveImports } from "./ImportSolver";
  * This is used to correct the line numbers we output on errors.
  * This must be kept in sync with the script tag in `getWebviewContent()`
  */
-const PRECEDING_LINES_IN_SCRIPT_TAG = 6;
+const PRECEDING_LINES_IN_SCRIPT_TAG = 7;
 
 let outputChannel: vscode.OutputChannel;
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
@@ -206,7 +206,7 @@ function getWebviewContent(code: String = "") {
   <html>
     <head>
       <script>window.localPath = "${localPath}";</script>
-      <script src="${extensionPath}/assets/p5.min.js"></script>
+      <script src="${extensionPath}/assets/p5.js"></script>
       <script src="${extensionPath}/assets/communication.js"></script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
       <script>var p5rulersize = 20</script>
@@ -220,6 +220,7 @@ function getWebviewContent(code: String = "") {
         <div id="p5canvas"></div>
       </div>
       <script id="code">
+        var PRECEDING_LINES_IN_SCRIPT_TAG = ${PRECEDING_LINES_IN_SCRIPT_TAG};
         function runCode() {
           var draw, preload, setup;
           var keyPressed, keyReleased, keyTyped;
