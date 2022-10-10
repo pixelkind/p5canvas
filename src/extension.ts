@@ -206,7 +206,7 @@ function getWebviewContent(code: String = "") {
   <html>
     <head>
       <script>window.localPath = "${localPath}";</script>
-      <script src="${extensionPath}/assets/p5.min.js"></script>
+      <script src="${extensionPath}/assets/p5.js"></script>
       <script src="${extensionPath}/assets/communication.js"></script>
       <script src="${extensionPath}/assets/p5setup.js"></script>
       <script>var p5rulersize = 20</script>
