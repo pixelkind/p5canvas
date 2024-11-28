@@ -33,6 +33,13 @@ function addLog(msg, type) {
     msg = JSON.stringify(msg, null, 4);
   }
 
+  if (
+    msg ===
+    'You just changed the value of "createCanvas", which was a p5 function. This could cause problems later if you\'re not careful.'
+  ) {
+    return;
+  }
+
   sendLog(msg, type);
 }
 
