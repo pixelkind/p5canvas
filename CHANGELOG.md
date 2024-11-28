@@ -4,6 +4,8 @@ All notable changes to the "p5canvas" extension will be documented in this file.
 
 ## 1.7.1
 
+- Forwarding the p5.js friendly errors
+- Updated to p5.js 1.4.2
 - Fixing bug with wrong `width` and `height` values
 
 ## 1.7.0
