@@ -2,6 +2,12 @@
 
 All notable changes to the "p5canvas" extension will be documented in this file.
 
+## 1.7.2
+
+- Updated the p5.js friendly error system to support line numbers, thanks to @ccoenen
+- Fixed a bug with wrong width and height, if you use custom canvas size
+- Added support for loadFont
+
 ## 1.7.1
 
 - Forwarding the p5.js friendly errors

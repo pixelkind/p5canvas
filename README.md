@@ -11,7 +11,7 @@ There is a standard setup script included which setups a full width/height canva
 
 - Side Preview while editing the JavaScript file
 - JSHint integration to find errors
-- Loading images with relative path
+- Loading images and fonts with relative path
 - Saving the current canvas as PNG (as a command)
 - Fully ES 6 compatible
 - Support for `import` Statements in Beta
@@ -26,9 +26,21 @@ If a JavaScript file is open, a p5canvas button appears in the status bar bottom
 
 ## Known Issues
 
-There are currently no known issues. If you find any issues, please feel free, to message me on [Twitter](https://twitter.com/pixelkind) or [Github](https://github.com/pixelkind/p5canvas).
+If you find any issues, please feel free, to write an issue on [Github](https://github.com/pixelkind/p5canvas).
 
 ## Release Notes
+
+### 1.7.2
+
+- Updated the p5.js friendly error system to support line numbers, thanks to @ccoenen
+- Fixed a bug with wrong width and height, if you use custom canvas size
+- Added support for loadFont
+
+### 1.7.1
+
+- Forwarding the p5.js friendly errors
+- Updated to p5.js 1.4.2
+- Fixing bug with wrong `width` and `height` values
 
 ### 1.7.0
 
@@ -46,14 +58,6 @@ There are currently no known issues. If you find any issues, please feel free, t
 ### 1.6.0
 
 - Beta Support for `import` Statements
-
-### 1.5.1
-
-- Bugfix: Canvas not showing on first open
-
-### 1.5.0
-
-- Changed communication from websockets to the internal messaging api
 
 For more Information, please look at the [Changelog](CHANGELOG.md).
 
